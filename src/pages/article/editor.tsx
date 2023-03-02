@@ -56,7 +56,7 @@ const Article = observer((props: Iprops) => {
           }}
           tableShape={[5, 6]}
           autoDetectCode={true}
-          previewTheme="smart-blue"
+          previewTheme={store.theme}
           footers={["=", "markdownTotal"]}
           toolbarsExclude={toolbarsExclude}
         />

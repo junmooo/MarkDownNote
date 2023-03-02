@@ -46,6 +46,30 @@ class Store {
     this.token = token;
   }
 
+  theme = "smart-blue";
+
+  nextTheme() {
+    const themes = [
+      "default",
+      "github",
+      "vuepress",
+      "mk-cute",
+      "smart-blue",
+      "cyanosis",
+    ];
+    for (let i = 0; i < themes.length; i++) {
+      if (themes[i] === this.theme) {
+        if (i < themes.length - 1) {
+          this.theme = themes[i + 1];
+          return;
+        } else {
+          this.theme = themes[0];
+          return;
+        }
+      }
+    }
+  }
+
   constructor() {
     makeAutoObservable(this);
   }

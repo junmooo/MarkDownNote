@@ -46,13 +46,10 @@ function Register(props: registerType) {
     else if (file.size > 5 * m) quality = 0.4;
     else if (file.size > 2 * m) quality = 0.6;
     const form = new FormData();
-    console.log("file", file, quality);
     FileUtils.fileResizeToFile(file, quality, (res: File) => {
       form.append("file", res);
-      console.log(form);
       upload(form)
         .then((res) => {
-          console.log("res", res);
           setAvatar(res.url);
         })
         .catch((err) => {

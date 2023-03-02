@@ -7,6 +7,8 @@ import deleteIcon from "@/assets/svg/delete.svg";
 import saveIcon from "@/assets/svg/upload.svg";
 import draftIcon from "@/assets/svg/draft.svg";
 import importIcon from "@/assets/svg/import.svg";
+import magicIcon from "@/assets/svg/magic.svg";
+import { useState } from "react";
 
 type Iprops = {
   article: Article;
@@ -71,6 +73,7 @@ const ArticleHeader = observer((props: Iprops) => {
             store.setEditFalse();
           }}
         />
+        <img src={magicIcon} alt="change" onClick={() => store.nextTheme()} />
         {editFlag && (
           <img
             src={deleteIcon}

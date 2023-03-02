@@ -23,7 +23,13 @@ import ArticleHeader from "./modules/ArticleHeader";
 
 const AriticleList = observer(() => {
   const [messageApi, contextHolder] = message.useMessage();
-
+  const editorRef = useRef<any>();
+  // const navigete = useNavigate();
+  const uploadRef = useRef<HTMLDivElement>();
+  const [article, setArticle] = useState<Article>({ article: "" });
+  const [items, setItems] = useState<MenuProps["items"]>([]);
+  const [showDialog, { toggle }] = useBoolean(false);
+  const [collapsed, setCollapsed] = useState(false);
   const { run: runDel } = useRequest(del, {
     manual: true,
     onSuccess: () => {
@@ -42,13 +48,6 @@ const AriticleList = observer(() => {
       });
     },
   });
-  const editorRef = useRef<any>();
-  // const navigete = useNavigate();
-  const uploadRef = useRef<HTMLDivElement>();
-  const [article, setArticle] = useState<Article>({ article: "" });
-  const [items, setItems] = useState<MenuProps["items"]>([]);
-  const [showDialog, { toggle }] = useBoolean(false);
-  const [collapsed, setCollapsed] = useState(false);
 
   const { loading, data, run } = useRequest(all, {
     manual: true,
@@ -145,7 +144,6 @@ const AriticleList = observer(() => {
             }}
             onClick={() => setCollapsed(!collapsed)}
           >
-            {/* <div className="logo"> 我是 logo</div> */}
             <Menu
               theme="light"
               className="menu"

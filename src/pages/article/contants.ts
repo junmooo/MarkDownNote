@@ -12,3 +12,12 @@ export const toolbarsExclude: ToolbarNames[] = [
   "fullscreen",
   "pageFullscreen",
 ];
+
+export const themes = [
+  "default",
+  "github",
+  "vuepress",
+  "mk-cute",
+  "smart-blue",
+  "cyanosis",
+];

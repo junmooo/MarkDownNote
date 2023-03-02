@@ -2,6 +2,7 @@
 import MdEditor from "md-editor-rt";
 import "md-editor-rt/lib/style.css";
 import "./article.less";
+import store from "@/mobx";
 import { observer } from "mobx-react";
 import { toolbarsExclude } from "./contants";
 interface Iprops {
@@ -19,7 +20,7 @@ const Article = observer((props: Iprops) => {
           editorId={"preview"}
           modelValue={article.article}
           theme="light"
-          previewTheme="smart-blue"
+          previewTheme={store.theme}
           previewOnly={true}
           toolbarsExclude={toolbarsExclude}
         />

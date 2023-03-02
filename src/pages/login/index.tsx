@@ -12,7 +12,6 @@ const Login = observer(() => {
     auth
       .login(values)
       .then((res) => {
-        console.log("res", res);
         store.setUserInfo(res?.user);
         store.setToken(res?.token);
         messageApi.open({
