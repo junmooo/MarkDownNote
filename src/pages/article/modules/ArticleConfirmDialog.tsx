@@ -1,17 +1,15 @@
 import { Modal, Input } from "antd";
 
-const { confirm } = Modal;
-
 type Iprops = {
   visible: boolean;
   onCancel: () => void;
   onConfirm: () => void;
-  title: string;
-  setTitle: (val: string) => void;
+  article: Article;
+  setArticle: (article: Article) => void;
 };
 
 const ArticleConfirmDialog = (props: Iprops) => {
-  const { visible, onCancel, onConfirm, title = "", setTitle } = props;
+  const { visible, onCancel, onConfirm, article, setArticle } = props;
   return (
     <Modal
       title="Basic Modal"
@@ -22,9 +20,9 @@ const ArticleConfirmDialog = (props: Iprops) => {
       <div style={{ margin: "15px" }}>
         <Input
           placeholder="请输入标题"
-          defaultValue={title}
+          defaultValue={article.title}
           onChange={(e) => {
-            setTitle(e.target.value);
+            setArticle({ ...article, title: e.target.value });
           }}
         />
       </div>

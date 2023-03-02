@@ -7,15 +7,20 @@
     "withGlobalTauri": false
   },
   "package": {
-    "productName": "MarkDownNote",
+    "productName": "MarkDown Note",
     "version": "0.0.0"
   },
   "tauri": {
     "allowlist": {
-      "all": false,
+      "all": true,
       "shell": {
-        "all": false,
+        "all": true,
         "open": true
+      },
+      "http": {
+        "all": true,
+        "request": false,
+        "scope": ["http://**", "https://**"]
       }
     },
     "bundle": {
@@ -40,9 +45,11 @@
       {
         "fullscreen": false,
         "resizable": true,
-        "title": "MarkDownNote",
-        "width": 800,
-        "height": 600
+        "title": "MarkDown Note",
+        "minWidth": 800,
+        "width": 1200,
+        "height": 700,
+        "minHeight": 600
       }
     ]
   }

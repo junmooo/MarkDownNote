@@ -19,13 +19,14 @@ export default defineConfig({
   server: {
     port: 1420,
     strictPort: true,
-    proxy: {
-      "/api": {
-        target: "http://124.222.27.22:8088/",
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ""),
-      },
-    },
+    // proxy: {
+    //   "/api": {
+    //     target: "http://124.222.27.22:8088/",
+    //     // target: "http://127.0.0.1:8088/",
+    //     changeOrigin: true,
+    //     rewrite: (path) => path.replace(/^\/api/, ""),
+    //   },
+    // },
   },
 
   // to make use of `TAURI_DEBUG` and other env variables

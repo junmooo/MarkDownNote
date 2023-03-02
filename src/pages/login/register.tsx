@@ -3,7 +3,7 @@ import auth from "@/api/login";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./register.less";
-import avatarIcon from "@/iconfont/svg/avatar.svg";
+import avatarIcon from "@/assets/svg/avatar.svg";
 import Upload from "@/components/common/upload";
 import { upload } from "@/api/files";
 import FileUtils from "@/utils/file";
@@ -25,6 +25,7 @@ function Register(props: registerType) {
     form
       .validateFields()
       .then((values) => {
+        values.avatar = avatar;
         auth.register(values).then(() => {
           navigate("/login");
         });
@@ -51,13 +52,14 @@ function Register(props: registerType) {
       console.log(form);
       upload(form)
         .then((res) => {
+          console.log("res", res);
           setAvatar(res.url);
         })
-        .catch(() => {
+        .catch((err) => {
           messageApi.open({
             type: "error",
-            content: "上传失败!",
-            duration: 2000,
+            content: "上传失败!" + err,
+            duration: 2,
           });
         });
     });
@@ -128,11 +130,11 @@ function Register(props: registerType) {
             iconSize={"50px"}
             uploadRef={uploadRef}
             onChange={onUpload}
-            formats={["jpg", "jpeg", "gif", "png", "svg"]}
+            formats={["image/*"]}
             maxSize={10}
             multiple={false}
             onCheck={(msg) =>
-              messageApi.open({ type: "error", content: msg, duration: 2000 })
+              messageApi.open({ type: "error", content: msg, duration: 2 })
             }
             icon={avatar || avatarIcon}
           />
@@ -143,6 +145,7 @@ function Register(props: registerType) {
           </Button>
         </Form.Item>
       </Form>
+      {contextHolder}
     </div>
   );
 }

@@ -9,8 +9,4 @@ export default [
     path: "/articles",
     element: <Articles />,
   },
-  {
-    path: "/article",
-    element: <Article />,
-  },
 ] as RouteObject[];

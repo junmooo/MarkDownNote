@@ -9,7 +9,7 @@ const routeConfig = [
   ...article,
   {
     path: "/",
-    element: <Navigate to="/login" replace />,
+    element: <Navigate to="/articles" replace />,
   },
   {
     path: "*",

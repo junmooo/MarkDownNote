@@ -3,14 +3,18 @@ import { Button, Form, Input, message } from "antd";
 import "./login.less";
 import auth from "@/api/login";
 import { useNavigate } from "react-router-dom";
-
-const Login: React.FC = () => {
+import store from "@/mobx";
+import { observer } from "mobx-react";
+const Login = observer(() => {
   const [messageApi, contextHolder] = message.useMessage();
   const navigate = useNavigate();
   const onFinish = (values: any) => {
     auth
       .login(values)
-      .then(() => {
+      .then((res) => {
+        console.log("res", res);
+        store.setUserInfo(res?.user);
+        store.setToken(res?.token);
         messageApi.open({
           type: "success",
           content: "登陆成功",
@@ -66,8 +70,9 @@ const Login: React.FC = () => {
           </Button>
         </Form.Item>
       </Form>
+      {contextHolder}
     </div>
   );
-};
+});
 
 export default Login;

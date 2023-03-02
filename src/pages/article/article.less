@@ -1,36 +1,32 @@
 .page-ctn {
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  margin-bottom: 200px;
+  height: calc(100vh - 198px);
 
   .article-ctn {
     width: calc(100%);
-    height: calc(100vh- 70px);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
     word-break: break-word;
 
-    .preview {
+    .editor {
+      height: calc(96vh - 104px);
+      width: 100%;
 
       .md-editor-preview {
         margin: 10px 15px;
       }
 
       img {
-        max-width: 70%;
+        max-width: 60%;
+        cursor: pointer;
       }
     }
 
     * {
       word-break: break-word;
-    }
-
-    .editor {
-      height: 200px;
-      width: calc(100% - 20px);
     }
   }
 }
