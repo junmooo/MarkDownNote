@@ -16,8 +16,10 @@ import { observer } from "mobx-react";
 import moment from "moment";
 import Upload from "@/components/common/upload";
 import ArticleConfirmDialog from "./modules/ArticleConfirmDialog";
-import Article from "./article";
+import Editor from "./editor";
+import Preview from "./preview";
 import { FileMarkdownOutlined } from "@ant-design/icons";
+import ArticleHeader from "./modules/ArticleHeader";
 
 const AriticleList = observer(() => {
   const [messageApi, contextHolder] = message.useMessage();
@@ -159,76 +161,18 @@ const AriticleList = observer(() => {
             className="content"
             style={{ height: "96vh", overflowY: "scroll" }}
           >
-            <div className="header">
-              <div className="left">
-                <div className="title">{article?.title}</div>
-                <div className="description">{`作者: ${
-                  article.authorName
-                } 创建时间: ${moment(article?.timeCreated).format(
-                  "YYYY-MM-DD HH:mm:SS"
-                )}`}</div>
-              </div>
-              <div className="right">
-                {!store.edit && (
-                  <img
-                    src={saveIcon}
-                    alt="save"
-                    onClick={() => {
-                      setArticle(article);
-                      toggle();
-                    }}
-                  />
-                )}
-                {store.edit && (
-                  <img
-                    src={editIcon}
-                    alt="edit"
-                    onClick={() => {
-                      // store.setDraft(article);
-                      store.setEditFalse();
-                    }}
-                  />
-                )}
-                {!store.edit && (
-                  <img
-                    src={draftIcon}
-                    alt="draft"
-                    onClick={() => {
-                      store.setEditTrue();
-                    }}
-                  />
-                )}
-                <img
-                  src={addIcon}
-                  alt="add"
-                  onClick={() => {
-                    setArticle({
-                      ...store.draft,
-                      authorId: store.userInfo?.id,
-                      authorName: store.userInfo?.name,
-                    });
-                    store.setEditFalse();
-                  }}
-                />
-                {store.edit && (
-                  <img
-                    src={deleteIcon}
-                    alt="detete"
-                    onClick={() => runDel({ id: article?.id })}
-                  />
-                )}
-                {store.edit && (
-                  <img
-                    src={importIcon}
-                    alt="import"
-                    onClick={() => {
-                      uploadRef.current?.click();
-                    }}
-                  />
-                )}
-              </div>
-            </div>
-            <Article article={article} setArticle={setArticle} />
+            <ArticleHeader
+              article={article}
+              setArticle={setArticle}
+              toggle={toggle}
+              uploadRef={uploadRef}
+              runDel={runDel}
+            />
+            {!store.edit ? (
+              <Editor article={article} setArticle={setArticle} />
+            ) : (
+              <Preview article={article} />
+            )}
           </div>
         </div>
 
