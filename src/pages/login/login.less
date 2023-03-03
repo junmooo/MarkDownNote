@@ -1,15 +1,40 @@
-.login-container {
-  width: 100%;
-  height: calc(100vh - 100px);
-  background-image: url("@/assets/login-bg.jpeg");
-  background-position: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  .submit-bar {
+.login-body {
+  div {
+    box-sizing: border-box;
+  }
+  img.fixed-image {
+    min-height: 100vh;
+    position: fixed;
+    width: 100%;
+    z-index: -5;
+    bottom: 0;
+    left: 0;
+  }
+  div.bgBox {
+    min-height: 100vh;
+    position: fixed;
+    width: 100%;
+    z-index: -3;
+    bottom: 0;
+    left: 0;
+    background-color: black;
+    opacity: 0.5;
+  }
+  .login-container {
+    margin: 100px auto;
+    min-width: 200px;
+    max-width: 600px;
+    height: calc(100vh - 400px);
+    background-color: white;
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+
+    .submit-bar {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+    }
   }
 }
