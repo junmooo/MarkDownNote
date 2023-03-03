@@ -20,6 +20,14 @@ const register = async (params: UserInfo) => {
   });
 };
 
+const updateUserArticleTree = async (params: any) => {
+  return await request({
+    url: `/user/updateUserArticleTree`,
+    method: "POST",
+    data: { ...params },
+  });
+};
+
 const getName = async (params: UserInfo) => {
   return await request({
     url: `/user/getName`,
@@ -28,9 +36,10 @@ const getName = async (params: UserInfo) => {
   });
 };
 
-const auth = {
+const user = {
   login,
   register,
   getName,
+  updateUserArticleTree,
 };
-export default auth;
+export default user;

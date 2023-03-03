@@ -1,5 +1,5 @@
 import { Button, Form, Input, message } from "antd";
-import auth from "@/api/login";
+import auth from "@/api/user";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./register.less";

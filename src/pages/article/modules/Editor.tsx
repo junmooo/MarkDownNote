@@ -4,6 +4,7 @@ import "md-editor-rt/lib/style.css";
 import FileUtils from "@/utils/file";
 import { upload } from "@/api/files";
 import store from "@/mobx";
+import "./article.less";
 import { observer } from "mobx-react";
 import { toolbarsExclude } from "../contants";
 import { useState } from "react";

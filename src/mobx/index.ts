@@ -3,7 +3,8 @@ import { makeAutoObservable } from "mobx";
 
 class Store {
   userInfo: UserInfo = {
-    name: "",
+    id: "447f838c-2c90-4853-8ec3-30bd7a6998ac",
+    name: "junmooo",
   };
 
   setUserInfo(info: UserInfo) {

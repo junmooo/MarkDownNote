@@ -1,5 +1,5 @@
 type LoginParam = {
-  name: string;
+  name?: string;
   pwd?: string;
 };
 
@@ -9,4 +9,5 @@ interface UserInfo extends LoginParam {
   email?: string;
   remark?: string;
   avatar?: string;
+  articleTree?: string;
 }

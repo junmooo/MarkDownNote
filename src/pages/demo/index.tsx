@@ -124,10 +124,6 @@ const App: React.FC = () => {
   ]);
   const [expandedKeys] = useState([]);
 
-  const onDragEnter: TreeProps["onDragEnter"] = (info) => {
-    console.log(info);
-  };
-
   const onDrop: TreeProps["onDrop"] = (info) => {
     console.log(info);
     const dropKey = info.node.key;
@@ -204,7 +200,6 @@ const App: React.FC = () => {
       switcherIcon={<DownOutlined />}
       showLine
       blockNode
-      onDragEnter={onDragEnter}
       onDrop={onDrop}
       treeData={gData}
     />

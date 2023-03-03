@@ -4,6 +4,7 @@ import "md-editor-rt/lib/style.css";
 import store from "@/mobx";
 import { observer } from "mobx-react";
 import { toolbarsExclude } from "../contants";
+import "./article.less";
 interface Iprops {
   article: Article;
 }

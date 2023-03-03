@@ -6,20 +6,18 @@ type Iprops = {
   onConfirm: () => void;
   article: Article;
   setArticle: (article: Article) => void;
+  title: string;
+  isFolder: boolean;
 };
 
 const ArticleConfirmDialog = (props: Iprops) => {
-  const { visible, onCancel, onConfirm, article, setArticle } = props;
+  const { visible, onCancel, onConfirm, article, setArticle, title, isFolder } =
+    props;
   return (
-    <Modal
-      title="Basic Modal"
-      open={visible}
-      onOk={onConfirm}
-      onCancel={onCancel}
-    >
+    <Modal title={title} open={visible} onOk={onConfirm} onCancel={onCancel}>
       <div style={{ margin: "15px" }}>
         <Input
-          placeholder="请输入标题"
+          placeholder="请输入"
           defaultValue={article.title}
           onChange={(e) => {
             setArticle({ ...article, title: e.target.value });

@@ -13,8 +13,6 @@
     }
 
     .sider {
-      // flex: 1;
-      padding-top: 30px;
       max-width: 250px;
       margin-right: 8px;
       transition: left 0.3s cubic-bezier(0.2, 0, 0, 1) 0s;
@@ -26,32 +24,45 @@
       }
 
 
-      &::after {
+      .toggle-btn {
         position: absolute;
         top: 44vh;
         width: 16px;
         height: 70px;
         content: '';
         background-size: cover;
-
       }
     }
 
     .opened {
       min-width: 250px;
+      display: block;
 
-      &::after {
+      .toggle-btn {
         left: 250px;
         background-image: url("@/assets/svg/fold.svg");
       }
     }
 
     .closed {
-      min-width: 80px;
+      display: none;
 
-      &::after {
-        left: 80px;
+      .toggle-btn {
+        left: 0px;
         background-image: url("@/assets/svg/unfold.svg");
+      }
+    }
+
+    .tool-bar {
+      padding: 15px 30px;
+      display: flex;
+      align-items: end;
+      justify-content: end;
+      background-color: #eeeeee;
+      box-shadow: 2px 2px 5px #ccc;
+
+      img {
+        margin-left: 10px;
       }
     }
 
@@ -66,7 +77,6 @@
 
         padding: 0px 30px;
         background-color: #eeeeee;
-        box-shadow: 5px 5px 5px #ddd;
 
         .left {
           display: flex;

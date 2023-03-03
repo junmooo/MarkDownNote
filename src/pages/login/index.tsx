@@ -1,7 +1,6 @@
-import React, { useState } from "react";
 import { Button, Form, Input, message, Space } from "antd";
 import "./login.less";
-import auth from "@/api/login";
+import auth from "@/api/user";
 import { useNavigate } from "react-router-dom";
 import store from "@/mobx";
 import { observer } from "mobx-react";
@@ -26,16 +25,11 @@ const Login = observer(() => {
       });
   };
 
-  const onFinishFailed = (errorInfo: any) => {
-    console.log("Failed:", errorInfo);
-  };
   return (
     <div className="login-body">
       <img className="fixed-image" src={bgImg} alt="fixed-image" />
       <div className="bgBox"></div>
-      <header>
-        
-      </header>
+      <header></header>
       <div className="login-container">
         <Form
           labelCol={{ span: 8 }}
@@ -43,7 +37,7 @@ const Login = observer(() => {
           style={{ maxWidth: 600 }}
           initialValues={{ remember: true }}
           onFinish={onFinish}
-          onFinishFailed={onFinishFailed}
+          // onFinishFailed={onFinishFailed}
         >
           <Form.Item
             label="Username"

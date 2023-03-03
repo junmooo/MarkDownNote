@@ -1,27 +1,33 @@
 import { all, del } from "@/api/article";
 import { useBoolean, useRequest } from "ahooks";
-import { Menu, MenuProps, Spin, message } from "antd";
-import { useEffect, useRef, useState } from "react";
+import { MenuProps, Spin, Tree, message } from "antd";
+import { Key, useEffect, useRef, useState } from "react";
 // import { useNavigate } from "react-router-dom";
 import "./index.less";
 import { save, getTree } from "@/api/article";
+import user from "@/api/user";
 import store from "@/mobx";
 import { observer } from "mobx-react";
 import moment from "moment";
 import Upload from "@/components/common/upload";
-import ArticleConfirmDialog from "./modules/ArticleConfirmDialog";
 import Editor from "./modules/Editor";
 import Preview from "./modules/Preview";
-import { FileMarkdownOutlined } from "@ant-design/icons";
+import treeIcon from "@/assets/svg/tree.svg";
+import newFolder from "@/assets/svg/new-folder.svg";
+import rightIcon from "@/assets/svg/right.svg";
+import ArticleConfirmDialog from "./modules/ArticleConfirmDialog";
 import ArticleHeader from "./modules/ArticleHeader";
+import TreeMenu from "./modules/TreeMenu";
 
 const AriticleList = observer(() => {
   const [messageApi, contextHolder] = message.useMessage();
   const uploadRef = useRef<HTMLDivElement>();
   const [article, setArticle] = useState<Article>({ article: "" });
-  const [items, setItems] = useState<MenuProps["items"]>([]);
+  const [treeData, setTreeData] = useState<MenuProps["items"]>([]);
   const [showDialog, { toggle }] = useBoolean(false);
+  const [draggable, { setFalse, setTrue }] = useBoolean(false);
   const [collapsed, setCollapsed] = useState(false);
+
   const { run: runDel } = useRequest(del, {
     manual: true,
     onSuccess: () => {
@@ -41,27 +47,30 @@ const AriticleList = observer(() => {
     },
   });
 
+  const { run: update, loading: updateUserLoading } = useRequest(
+    user.updateUserArticleTree,
+    {
+      manual: true,
+      onSuccess: (res: any) => {
+        setTreeData(res.data);
+      },
+      onError: (err) => {
+        messageApi.open({
+          type: "error",
+          duration: 2,
+          content: err.message,
+        });
+      },
+    }
+  );
   const { loading: loadingTree, run: getTrees } = useRequest(getTree, {
     manual: true,
     onSuccess: (res) => {
-      console.log("res", res);
-      const tree = JSON.parse(res);
-      console.log("tree", tree);
-
-      setItems(
-        tree.map((item: { aid: string; atitle: string }) => {
-          return {
-            key: item.aid,
-            label: item.atitle,
-            icon: <FileMarkdownOutlined />,
-          };
-        })
-      );
-      // const current =
-      //   res.find((item: Article) => {
-      //     return item.id === article.id;
-      //   }) || res?.[0];
-      // setArticle(current);
+      setTreeData(res);
+      const current = data.find((item: Article) => {
+        return item.id === res?.[0].key;
+      });
+      setArticle(current);
     },
     onError: (err) => {
       messageApi.open({
@@ -75,7 +84,7 @@ const AriticleList = observer(() => {
   const { loading, data, run } = useRequest(all, {
     manual: true,
     onSuccess: (res) => {
-      console.log("res2", res);
+      getTrees({ uid: store.userInfo.id });
     },
     onError: (err) => {
       messageApi.open({
@@ -109,7 +118,6 @@ const AriticleList = observer(() => {
 
   useEffect(() => {
     run();
-    getTree({ uid: store.userInfo.id });
   }, []);
 
   const getFiles = (files: FileList) => {
@@ -135,11 +143,10 @@ const AriticleList = observer(() => {
     runSave({ ...article });
   };
 
-  const onClick = (param: any) => {
-    param.domEvent.stopPropagation();
-    param.domEvent.preventDefault();
+  const onSelect = (key: Key) => {
+    if (!key) return;
     const current = data.find((item: Article) => {
-      return item.id === param.key;
+      return item.id === key;
     });
     setArticle(current);
   };
@@ -153,19 +160,47 @@ const AriticleList = observer(() => {
             style={{
               display: `${store.edit ? "block" : "none"}`,
             }}
-            onClick={() => setCollapsed(!collapsed)}
           >
-            <Menu
-              theme="light"
-              className="menu"
-              onClick={onClick}
-              selectedKeys={[article?.id || ""]}
-              mode="inline"
-              inlineCollapsed={collapsed}
-              items={items}
+            {!collapsed ? (
+              <>
+                <div className="tool-bar">
+                  {draggable ? (
+                    <img
+                      src={rightIcon}
+                      alt="right"
+                      width={"20px"}
+                      onClick={() => {
+                        update({
+                          id: store.userInfo.id,
+                          articleTree: JSON.stringify(treeData),
+                        });
+                        setFalse();
+                      }}
+                    />
+                  ) : (
+                    <img
+                      src={treeIcon}
+                      alt="tree"
+                      width={"20px"}
+                      onClick={setTrue}
+                    />
+                  )}
+                  {/* <img src={newFolder} alt="new" width={"20px"} onClick={toggle} /> */}
+                </div>
+                <TreeMenu
+                  treeData={treeData}
+                  draggable={draggable}
+                  setTreeData={setTreeData}
+                  onSelect={onSelect}
+                  article={article}
+                />
+              </>
+            ) : null}
+            <div
+              onClick={() => setCollapsed(!collapsed)}
+              className="toggle-btn"
             />
           </div>
-
           <div
             className="content"
             style={{ height: "96vh", overflowY: "scroll" }}
@@ -201,6 +236,8 @@ const AriticleList = observer(() => {
           onConfirm={onConfirm}
           article={article}
           setArticle={setArticle}
+          title={"标题"}
+          isFolder={false}
         />
       </div>
       {contextHolder}

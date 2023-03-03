@@ -39,8 +39,6 @@ export async function getTree(params: any) {
     params,
   });
   if (res?.code === 1) {
-    console.log("res", JSON.parse(res?.data));
-
     return Promise.resolve(res?.data || []);
   }
 }
