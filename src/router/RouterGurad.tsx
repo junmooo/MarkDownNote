@@ -1,11 +1,10 @@
 import { RouteObject, useLocation, useNavigate } from "react-router-dom";
 import { useRoutes } from "react-router-dom";
 import store from "@/mobx";
-import { observer } from "mobx-react";
 
 type Iprops = { routes: RouteObject[] };
 
-const RouterGurad = observer((props: Iprops) => {
+const RouterGurad = (props: Iprops) => {
   const { routes } = props;
   const route = useRoutes(routes);
   const location = useLocation();
@@ -17,6 +16,6 @@ const RouterGurad = observer((props: Iprops) => {
     navigate("/login");
   }
   return route;
-});
+};
 
 export default RouterGurad;

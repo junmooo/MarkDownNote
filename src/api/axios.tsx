@@ -57,8 +57,8 @@ function request(
   customOptions?: { repeat_request_cancel: boolean }
 ) {
   const service = axios.create({
-    // baseURL: "http://127.0.0.1:8088/",
-    baseURL: "http://124.222.27.22:8088/",
+    baseURL: "http://127.0.0.1:8088/",
+    // baseURL: "http://124.222.27.22:8088/",
     timeout: 60000,
   });
 

@@ -1,15 +1,14 @@
 /* eslint-disable no-loop-func */
 import MdEditor from "md-editor-rt";
 import "md-editor-rt/lib/style.css";
-import "./article.less";
 import store from "@/mobx";
 import { observer } from "mobx-react";
-import { toolbarsExclude } from "./contants";
+import { toolbarsExclude } from "../contants";
 interface Iprops {
   article: Article;
 }
 
-const Article = observer((props: Iprops) => {
+const Preview = observer((props: Iprops) => {
   const { article } = props;
 
   return (
@@ -29,4 +28,4 @@ const Article = observer((props: Iprops) => {
   );
 });
 
-export default Article;
+export default Preview;

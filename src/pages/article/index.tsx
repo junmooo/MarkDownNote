@@ -4,27 +4,19 @@ import { Menu, MenuProps, Spin, message } from "antd";
 import { useEffect, useRef, useState } from "react";
 // import { useNavigate } from "react-router-dom";
 import "./index.less";
-import { save } from "@/api/article";
-import addIcon from "@/assets/svg/add.svg";
-import editIcon from "@/assets/svg/edit.svg";
-import deleteIcon from "@/assets/svg/delete.svg";
-import saveIcon from "@/assets/svg/upload.svg";
-import draftIcon from "@/assets/svg/draft.svg";
-import importIcon from "@/assets/svg/import.svg";
+import { save, getTree } from "@/api/article";
 import store from "@/mobx";
 import { observer } from "mobx-react";
 import moment from "moment";
 import Upload from "@/components/common/upload";
 import ArticleConfirmDialog from "./modules/ArticleConfirmDialog";
-import Editor from "./editor";
-import Preview from "./preview";
+import Editor from "./modules/Editor";
+import Preview from "./modules/Preview";
 import { FileMarkdownOutlined } from "@ant-design/icons";
 import ArticleHeader from "./modules/ArticleHeader";
 
 const AriticleList = observer(() => {
   const [messageApi, contextHolder] = message.useMessage();
-  const editorRef = useRef<any>();
-  // const navigete = useNavigate();
   const uploadRef = useRef<HTMLDivElement>();
   const [article, setArticle] = useState<Article>({ article: "" });
   const [items, setItems] = useState<MenuProps["items"]>([]);
@@ -49,23 +41,41 @@ const AriticleList = observer(() => {
     },
   });
 
-  const { loading, data, run } = useRequest(all, {
+  const { loading: loadingTree, run: getTrees } = useRequest(getTree, {
     manual: true,
     onSuccess: (res) => {
+      console.log("res", res);
+      const tree = JSON.parse(res);
+      console.log("tree", tree);
+
       setItems(
-        res.map((item: Article) => {
+        tree.map((item: { aid: string; atitle: string }) => {
           return {
-            key: item.id,
-            label: item.title,
+            key: item.aid,
+            label: item.atitle,
             icon: <FileMarkdownOutlined />,
           };
         })
       );
-      const current =
-        res.find((item: Article) => {
-          return item.id === article.id;
-        }) || res?.[0];
-      setArticle(current);
+      // const current =
+      //   res.find((item: Article) => {
+      //     return item.id === article.id;
+      //   }) || res?.[0];
+      // setArticle(current);
+    },
+    onError: (err) => {
+      messageApi.open({
+        type: "error",
+        duration: 2,
+        content: err.message,
+      });
+    },
+  });
+
+  const { loading, data, run } = useRequest(all, {
+    manual: true,
+    onSuccess: (res) => {
+      console.log("res2", res);
     },
     onError: (err) => {
       messageApi.open({
@@ -99,6 +109,7 @@ const AriticleList = observer(() => {
 
   useEffect(() => {
     run();
+    getTree({ uid: store.userInfo.id });
   }, []);
 
   const getFiles = (files: FileList) => {

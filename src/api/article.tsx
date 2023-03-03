@@ -31,3 +31,16 @@ export async function del(params: any) {
     return Promise.resolve(res?.data || []);
   }
 }
+
+export async function getTree(params: any) {
+  const res: any = await request({
+    url: `/user/getTree`,
+    method: "get",
+    params,
+  });
+  if (res?.code === 1) {
+    console.log("res", JSON.parse(res?.data));
+
+    return Promise.resolve(res?.data || []);
+  }
+}
