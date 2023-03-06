@@ -14,7 +14,6 @@ type Iprops = {
 };
 
 const TreeModal = observer((props: Iprops) => {
-
   const { treeData, setTreeData, draggable, onSelect, article } = props;
   const onDrop: TreeProps["onDrop"] = (info) => {
     const dropKey = info.node.key;
@@ -37,7 +36,7 @@ const TreeModal = observer((props: Iprops) => {
         }
       }
     };
-    const data = [...treeData];
+    const data = [...treeData.tree];
 
     // Find dragObject
     let dragObj: DataNode;
@@ -78,7 +77,8 @@ const TreeModal = observer((props: Iprops) => {
         ar.splice(i! + 1, 0, dragObj!);
       }
     }
-    setTreeData(data);
+    const temp = { ...treeData, tree: data };
+    setTreeData(temp);
   };
 
   return (
@@ -93,7 +93,7 @@ const TreeModal = observer((props: Iprops) => {
         }}
         blockNode
         onDrop={onDrop}
-        treeData={treeData}
+        treeData={treeData?.tree || []}
       />
     </div>
   );

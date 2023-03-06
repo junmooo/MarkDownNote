@@ -7,6 +7,12 @@ import avatarIcon from "@/assets/svg/avatar.svg";
 import Upload from "@/components/common/upload";
 import { upload } from "@/api/files";
 import FileUtils from "@/utils/file";
+import {
+  KeyOutlined,
+  MailOutlined,
+  PhoneOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 
 type registerType = {
   title?: string;
@@ -68,80 +74,101 @@ function Register(props: registerType) {
     }
   }, [form, record]);
   return (
-    <div className="rgst-ctn">
-      <Form
-        form={form}
-        labelCol={{ span: 8 }}
-        wrapperCol={{ span: 16 }}
-        style={{ maxWidth: 600 }}
-        initialValues={{ remember: true }}
-        className="form-style"
-        onFinish={onFinish}
-      >
-        <Form.Item
-          label="Username"
-          name="name"
-          key={"name"}
-          rules={[
-            { required: true, message: "Please input your username!" },
-            {
-              validator: async (_, value) => {
-                const res = await auth.getName({ name: value });
-                return res?.data === null
-                  ? Promise.resolve()
-                  : Promise.reject("用户名被占用!");
+    <div className="rgst-body">
+      <div className="bg" />
+      <div className="rgst-ctn">
+        {/* <Spin spinning={loading}> */}
+
+        <Form
+          form={form}
+          style={{ maxWidth: 600 }}
+          initialValues={{ remember: true }}
+          className="form-style"
+          layout="vertical"
+          onFinish={onFinish}
+        >
+          <Form.Item
+            name="name"
+            key={"name"}
+            rules={[
+              { required: true, message: "请输入用户名" },
+              {
+                validator: async (_, value) => {
+                  if (value) {
+                    const res = await auth.getName({ name: value });
+                    return res?.data === null
+                      ? Promise.resolve()
+                      : Promise.reject("用户名被占用!");
+                  }
+                },
               },
-            },
-          ]}
-        >
-          <Input />
-        </Form.Item>
+            ]}
+          >
+            <Input
+              size="large"
+              placeholder="用户名"
+              prefix={<UserOutlined />}
+            />
+          </Form.Item>
 
-        <Form.Item
-          label="Password"
-          name="pwd"
-          key={"pwd"}
-          rules={[{ required: true, message: "Please input your password!" }]}
-        >
-          <Input type="password" disabled={record ? true : false} />
-        </Form.Item>
+          <Form.Item
+            name="pwd"
+            key={"pwd"}
+            rules={[{ required: true, message: "请输入密码" }]}
+          >
+            <Input
+              size="large"
+              placeholder="密码"
+              prefix={<KeyOutlined />}
+              type="password"
+              disabled={record ? true : false}
+            />
+          </Form.Item>
 
-        <Form.Item
-          label="Email"
-          name="email"
-          key={"email"}
-          rules={[{ required: true, message: "Please input your Email!" }]}
-        >
-          <Input />
-        </Form.Item>
+          <Form.Item
+            name="email"
+            key={"email"}
+            rules={[{ required: true, message: "请输入邮箱" }]}
+          >
+            <Input size="large" placeholder="邮箱" prefix={<MailOutlined />} />
+          </Form.Item>
 
-        <Form.Item label="Phone No" name="phoneNo" key={"phoneNo"}>
-          <Input />
-        </Form.Item>
+          <Form.Item
+            name="phoneNo"
+            key={"phoneNo"}
+            rules={[{ required: true, message: "请输入电话" }]}
+          >
+            <Input size="large" placeholder="电话" prefix={<PhoneOutlined />} />
+          </Form.Item>
 
-        <Form.Item label="Remark" name="remark" key={"remark"}>
-          <Input />
-        </Form.Item>
-        <Form.Item label="Avatar" name="avatar" key={"avatar"}>
-          <Upload
-            iconSize={"50px"}
-            uploadRef={uploadRef}
-            onChange={onUpload}
-            formats={["image/*"]}
-            maxSize={10}
-            multiple={false}
-            onCheck={(msg) =>
-              messageApi.open({ type: "error", content: msg, duration: 2 })
-            }
-            icon={avatar || avatarIcon}
-          />
-        </Form.Item>
-        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-          <Button type="primary" htmlType="submit">
-            Submit
-          </Button>
-        </Form.Item>
-      </Form>
+          <Form.Item name="avatar" key={"avatar"}>
+            <div
+              className="avatar-ctn"
+              onClick={() => uploadRef.current?.click()}
+            >
+              <Upload
+                iconSize={"50px"}
+                uploadRef={uploadRef}
+                onChange={onUpload}
+                formats={["image/*"]}
+                maxSize={10}
+                multiple={false}
+                onCheck={(msg) =>
+                  messageApi.open({ type: "error", content: msg, duration: 2 })
+                }
+                // icon={avatar || avatarIcon}
+              />
+              <img width={"45px"} src={avatar || avatarIcon} />
+              点击上传头像
+            </div>
+          </Form.Item>
+          <Form.Item>
+            <Button type="primary" htmlType="submit" block>
+              提交
+            </Button>
+          </Form.Item>
+        </Form>
+      </div>
       {contextHolder}
     </div>
   );

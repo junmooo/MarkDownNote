@@ -12,7 +12,7 @@ const RouterGurad = (props: Iprops) => {
 
   const exclude = ["/login", "/register"];
 
-  if (!exclude.includes(location.pathname) && !store.token) {
+  if (!exclude.includes(location.pathname) && !localStorage.getItem("token")) {
     navigate("/login");
   }
   return route;

@@ -9,3 +9,12 @@ type Article = {
   timeCreated?: string;
   timeUpdated?: string;
 };
+
+type ArticleTree = {
+  id: string;
+  tree: string;
+  ownerId: string;
+  comment?: string;
+  timeCreated?: string;
+  timeUpdated?: string;
+};

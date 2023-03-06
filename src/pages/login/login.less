@@ -1,31 +1,29 @@
 .login-body {
-  div {
-    box-sizing: border-box;
-  }
-  img.fixed-image {
-    min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow-y: hidden;
+
+  .bg {
     position: fixed;
-    width: 100%;
-    z-index: -5;
-    bottom: 0;
+    top: 0;
     left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-image: url("@/assets/login-bg.jpeg");
+    background-size: 100% 100%;
+    background-color: rgba(255, 255, 255, 0.9);
+    z-index: -100;
+    filter: blur(4px);
   }
-  div.bgBox {
-    min-height: 100vh;
-    position: fixed;
-    width: 100%;
-    z-index: -3;
-    bottom: 0;
-    left: 0;
-    background-color: black;
-    opacity: 0.5;
-  }
+
   .login-container {
-    margin: 100px auto;
-    min-width: 200px;
-    max-width: 600px;
-    height: calc(100vh - 400px);
-    background-color: white;
+    padding-top: 40px;
+    width: 600px;
+    height: 300px;
+    background-color: rgba(255, 255, 255, 0.7);
+    box-shadow: 0px 0px 5px #fff;
     display: flex;
     justify-content: center;
     align-items: center;

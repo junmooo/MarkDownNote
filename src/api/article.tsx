@@ -32,9 +32,30 @@ export async function del(params: any) {
   }
 }
 
-export async function getTree(params: any) {
+export async function getTreeByUid(params: any) {
   const res: any = await request({
-    url: `/user/getTree`,
+    url: `/article/getTreeByUid`,
+    method: "get",
+    params,
+  });
+  if (res?.code === 1) {
+    return Promise.resolve(res?.data || []);
+  }
+}
+export async function saveTree(params: any) {
+  const res: any = await request({
+    url: `/article/saveTree`,
+    method: "post",
+    data: params,
+  });
+  if (res?.code === 1) {
+    return Promise.resolve(res?.data || []);
+  }
+}
+
+export async function getArticleById(params: any) {
+  const res: any = await request({
+    url: `/article/getArticleById`,
     method: "get",
     params,
   });
