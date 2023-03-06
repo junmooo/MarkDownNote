@@ -5,6 +5,7 @@ import treeIcon from "@/assets/svg/tree.svg";
 import rightIcon from "@/assets/svg/right.svg";
 import { useBoolean } from "ahooks";
 import { Key, useState } from "react";
+import { Tooltip } from "antd";
 
 type Iprops = {
   treeData: any;
@@ -32,20 +33,29 @@ const Sider = observer((props: Iprops) => {
         <>
           <div className="tool-bar">
             {draggable ? (
-              <img
-                src={rightIcon}
-                alt="right"
-                width={"20px"}
-                onClick={() => {
-                  runSaveTree({
-                    id: treeData?.id,
-                    tree: JSON.stringify(treeData.tree),
-                  });
-                  setFalse();
-                }}
-              />
+              <Tooltip title="保存修改" color={"gray"} key={1}>
+                <img
+                  src={rightIcon}
+                  alt="right"
+                  width={"20px"}
+                  onClick={() => {
+                    runSaveTree({
+                      id: treeData?.id,
+                      tree: JSON.stringify(treeData.tree),
+                    });
+                    setFalse();
+                  }}
+                />
+              </Tooltip>
             ) : (
-              <img src={treeIcon} alt="tree" width={"20px"} onClick={setTrue} />
+              <Tooltip title="修改文档层级关系和顺序" color={"gray"} key={1}>
+                <img
+                  src={treeIcon}
+                  alt="tree"
+                  width={"20px"}
+                  onClick={setTrue}
+                />
+              </Tooltip>
             )}
           </div>
           <TreeMenu

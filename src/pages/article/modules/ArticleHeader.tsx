@@ -7,13 +7,14 @@ import deleteIcon from "@/assets/svg/delete.svg";
 import saveIcon from "@/assets/svg/upload.svg";
 import draftIcon from "@/assets/svg/draft.svg";
 import importIcon from "@/assets/svg/import.svg";
+import exportIcon from "@/assets/svg/export.svg";
 import magicIcon from "@/assets/svg/magic.svg";
 import { ExclamationCircleFilled } from "@ant-design/icons";
 import { Modal, message } from "antd";
 import { useBoolean, useRequest } from "ahooks";
 import { del, save } from "@/api/article";
 import Upload from "@/components/common/upload";
-import { useRef } from "react";
+import React, { LegacyRef, useEffect, useRef, useState } from "react";
 import ArticleConfirmDialog from "./ArticleConfirmDialog";
 const { confirm } = Modal;
 type Iprops = {
@@ -29,11 +30,19 @@ const ArticleHeader = observer((props: Iprops) => {
   const [messageApi, contextHolder] = message.useMessage();
   const { article, setArticle, treeData, getArticle, runSaveTree } = props;
   const [showDialog, { toggle }] = useBoolean(false);
-
+  const [href, setHref] = useState("#");
   const userInfo = JSON.parse(localStorage.getItem("userInfo") || "{}");
 
   const uploadRef = useRef<HTMLDivElement>();
+  const aRef = useRef<any>();
   let editFlag = store.edit;
+
+  useEffect(() => {
+    setHref(
+      URL.createObjectURL(new Blob([article.article], { type: "text/plain" }))
+    );
+  }, [article]);
+
   const showDeleteConfirm = () => {
     confirm({
       title: "确定要删除吗?",
@@ -228,13 +237,22 @@ const ArticleHeader = observer((props: Iprops) => {
             <img src={deleteIcon} alt="detete" onClick={showDeleteConfirm} />
           )}
           {editFlag && (
-            <img
-              src={importIcon}
-              alt="import"
-              onClick={() => {
-                uploadRef.current?.click();
-              }}
-            />
+            <>
+              <img
+                src={importIcon}
+                alt="import"
+                onClick={() => {
+                  uploadRef.current?.click();
+                }}
+              />
+              <img
+                src={exportIcon}
+                alt="import"
+                onClick={() => {
+                  aRef.current.click();
+                }}
+              />
+            </>
           )}
         </div>
       </div>
@@ -257,6 +275,12 @@ const ArticleHeader = observer((props: Iprops) => {
         setArticle={setArticle}
         title={"标题"}
         isFolder={false}
+      />
+      <a
+        ref={aRef}
+        download={`${article.title}.md`}
+        style={{ display: "none" }}
+        href={href}
       />
     </>
   );
