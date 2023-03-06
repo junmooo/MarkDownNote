@@ -146,7 +146,7 @@ const ArticleHeader = observer((props: Iprops) => {
       // tree 中没匹配上 该 article id 说明是新增-重新维护tree,否则就是修改-tree不变
       if (!str.includes(res)) {
         // 更新tree 在最外层追加
-        treeData.tree.push({
+        treeData.tree.unshift({
           key: res || "",
           title: article.title,
         });
@@ -206,7 +206,6 @@ const ArticleHeader = observer((props: Iprops) => {
               src={editIcon}
               alt="edit"
               onClick={() => {
-                // store.setDraft(article);
                 store.setEditFalse();
               }}
             />
@@ -225,7 +224,7 @@ const ArticleHeader = observer((props: Iprops) => {
             alt="add"
             onClick={() => {
               setArticle({
-                ...store.draft,
+                article: "# 标题",
                 authorId: userInfo?.id,
                 authorName: userInfo?.name,
               });
