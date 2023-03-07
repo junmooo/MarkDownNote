@@ -8,14 +8,16 @@ import saveIcon from "@/assets/svg/upload.svg";
 import draftIcon from "@/assets/svg/draft.svg";
 import importIcon from "@/assets/svg/import.svg";
 import exportIcon from "@/assets/svg/export.svg";
+import exitIcon from "@/assets/svg/exit.svg";
 import magicIcon from "@/assets/svg/magic.svg";
 import { ExclamationCircleFilled } from "@ant-design/icons";
-import { Modal, message } from "antd";
+import { Modal, Tooltip, message } from "antd";
 import { useBoolean, useRequest } from "ahooks";
 import { del, save } from "@/api/article";
 import Upload from "@/components/common/upload";
 import React, { LegacyRef, useEffect, useRef, useState } from "react";
 import ArticleConfirmDialog from "./ArticleConfirmDialog";
+import { useNavigate } from "react-router-dom";
 const { confirm } = Modal;
 type Iprops = {
   article: Article;
@@ -32,7 +34,7 @@ const ArticleHeader = observer((props: Iprops) => {
   const [showDialog, { toggle }] = useBoolean(false);
   const [href, setHref] = useState("#");
   const userInfo = JSON.parse(localStorage.getItem("userInfo") || "{}");
-
+  const navigate = useNavigate();
   const uploadRef = useRef<HTMLDivElement>();
   const aRef = useRef<any>();
   let editFlag = store.edit;
@@ -53,6 +55,20 @@ const ArticleHeader = observer((props: Iprops) => {
       cancelText: "取消",
       onOk() {
         runDel({ id: article?.id || "" });
+      },
+    });
+  };
+  const showExitConfirm = () => {
+    confirm({
+      title: "确定要退出登陆吗?",
+      icon: <ExclamationCircleFilled />,
+      content: "退出并清空缓存!",
+      okText: "确定",
+      okType: "danger",
+      cancelText: "取消",
+      onOk() {
+        localStorage.clear();
+        navigate("/login");
       },
     });
   };
@@ -192,65 +208,90 @@ const ArticleHeader = observer((props: Iprops) => {
         </div>
         <div className="right">
           {!editFlag && (
-            <img
-              src={saveIcon}
-              alt="save"
-              onClick={() => {
-                setArticle(article);
-                toggle();
-              }}
-            />
+            <Tooltip title="保存到云端" color={"gray"} key={"save"}>
+              <img
+                src={saveIcon}
+                alt="save"
+                onClick={() => {
+                  setArticle(article);
+                  toggle();
+                }}
+              />
+            </Tooltip>
           )}
           {editFlag && (
-            <img
-              src={editIcon}
-              alt="edit"
-              onClick={() => {
-                store.setEditFalse();
-              }}
-            />
+            <Tooltip title="编辑" color={"gray"} key={"edit"}>
+              <img
+                src={editIcon}
+                alt="edit"
+                onClick={() => {
+                  store.setEditFalse();
+                }}
+              />
+            </Tooltip>
           )}
           {!editFlag && (
-            <img
-              src={draftIcon}
-              alt="draft"
-              onClick={() => {
-                store.setEditTrue();
-              }}
-            />
+            <Tooltip title="保存到草稿...tudo" color={"gray"} key={"draft"}>
+              <img
+                src={draftIcon}
+                alt="draft"
+                onClick={() => {
+                  store.setEditTrue();
+                }}
+              />
+            </Tooltip>
           )}
-          <img
-            src={addIcon}
-            alt="add"
-            onClick={() => {
-              setArticle({
-                article: "# 标题",
-                authorId: userInfo?.id,
-                authorName: userInfo?.name,
-              });
-              store.setEditFalse();
-            }}
-          />
-          <img src={magicIcon} alt="change" onClick={() => store.nextTheme()} />
           {editFlag && (
-            <img src={deleteIcon} alt="detete" onClick={showDeleteConfirm} />
+            <Tooltip title="新增文档" color={"gray"} key={"add"}>
+              <img
+                src={addIcon}
+                alt="add"
+                onClick={() => {
+                  setArticle({
+                    article: "# 标题",
+                    authorId: userInfo?.id,
+                    authorName: userInfo?.name,
+                  });
+                  store.setEditFalse();
+                }}
+              />
+            </Tooltip>
+          )}
+          <Tooltip title="变换样式" color={"gray"} key={"change"}>
+            <img
+              src={magicIcon}
+              alt="change"
+              onClick={() => store.nextTheme()}
+            />
+          </Tooltip>
+          {editFlag && (
+            <Tooltip title="删除当前文档" color={"gray"} key={"detete"}>
+              <img src={deleteIcon} alt="detete" onClick={showDeleteConfirm} />
+            </Tooltip>
           )}
           {editFlag && (
             <>
-              <img
-                src={importIcon}
-                alt="import"
-                onClick={() => {
-                  uploadRef.current?.click();
-                }}
-              />
-              <img
-                src={exportIcon}
-                alt="import"
-                onClick={() => {
-                  aRef.current.click();
-                }}
-              />
+              <Tooltip title="导入文档" color={"gray"} key={"import"}>
+                <img
+                  src={importIcon}
+                  alt="import"
+                  onClick={() => {
+                    uploadRef.current?.click();
+                  }}
+                />
+              </Tooltip>
+              <Tooltip title="导出文档" color={"gray"} key={"export"}>
+                <img
+                  src={exportIcon}
+                  alt="export"
+                  onClick={() => {
+                    aRef.current.click();
+                  }}
+                />
+              </Tooltip>
+              <Tooltip title="退出登录" color={"gray"} key={"exit"}>
+                <img src={exitIcon} alt="exit" onClick={showExitConfirm} />
+              </Tooltip>
             </>
           )}
         </div>
