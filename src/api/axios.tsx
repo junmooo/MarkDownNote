@@ -91,14 +91,16 @@ function request(
       return response.data;
     },
     (error) => {
+      debugger;
+      localStorage.clear();
       error.config && removePending(error.config);
       let errMsg = error;
       if (error.response?.status === 403) {
         errMsg = "token 失效";
+        window.location.href = "/login";
       } else {
         localStorage.clear();
       }
-      window.location.href = "/login";
       return Promise.reject(errMsg);
     }
   );
