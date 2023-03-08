@@ -1,5 +1,4 @@
 import axios from "axios";
-import store from "@/mobx";
 
 const pendingMap = new Map();
 /**
@@ -75,7 +74,7 @@ function request(
       removePending(config);
       custom_options.repeat_request_cancel && addPending(config);
       // 自动携带token
-      config.headers.token = store.token;
+      config.headers.token = localStorage.getItem("token");
       return config;
     },
     (error) => {
@@ -93,12 +92,14 @@ function request(
     },
     (error) => {
       error.config && removePending(error.config);
+      let errMsg = error;
       if (error.response?.status === 403) {
-        window.location.href = "/login";
-        return Promise.reject("token 失效");
+        errMsg = "token 失效";
       } else {
-        return Promise.reject(error);
+        localStorage.clear();
       }
+      window.location.href = "/login";
+      return Promise.reject(errMsg);
     }
   );
 

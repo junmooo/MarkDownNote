@@ -44,6 +44,7 @@
     "windows": [
       {
         "fullscreen": false,
+        "fileDropEnabled": false,
         "resizable": true,
         "title": "MarkDown Note",
         "minWidth": 800,

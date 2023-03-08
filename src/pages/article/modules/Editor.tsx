@@ -1,19 +1,19 @@
 /* eslint-disable no-loop-func */
 import MdEditor from "md-editor-rt";
 import "md-editor-rt/lib/style.css";
-import "./article.less";
 import FileUtils from "@/utils/file";
 import { upload } from "@/api/files";
 import store from "@/mobx";
+import "./article.less";
 import { observer } from "mobx-react";
-import { toolbarsExclude } from "./contants";
+import { toolbarsExclude } from "../contants";
 import { useState } from "react";
 interface Iprops {
   article: Article;
   setArticle: (article: Article) => void;
 }
 
-const Article = observer((props: Iprops) => {
+const Editor = observer((props: Iprops) => {
   const { article, setArticle } = props;
   const onUploadImg = async (
     files: File[],
@@ -56,7 +56,7 @@ const Article = observer((props: Iprops) => {
           }}
           tableShape={[5, 6]}
           autoDetectCode={true}
-          previewTheme="smart-blue"
+          previewTheme={store.theme}
           footers={["=", "markdownTotal"]}
           toolbarsExclude={toolbarsExclude}
         />
@@ -65,4 +65,4 @@ const Article = observer((props: Iprops) => {
   );
 });
 
-export default Article;
+export default Editor;
