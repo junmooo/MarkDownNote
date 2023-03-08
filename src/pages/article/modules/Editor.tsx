@@ -1,20 +1,20 @@
 /* eslint-disable no-loop-func */
 import MdEditor from "md-editor-rt";
 import "md-editor-rt/lib/style.css";
-import "./article.less";
 import FileUtils from "@/utils/file";
 import { upload } from "@/api/files";
 import store from "@/mobx";
+import "./article.less";
 import { observer } from "mobx-react";
-import { toolbarsExclude } from "./contants";
+import { toolbarsExclude } from "../contants";
+import { useState } from "react";
 interface Iprops {
   article: Article;
   setArticle: (article: Article) => void;
 }
 
-const Article = observer((props: Iprops) => {
+const Editor = observer((props: Iprops) => {
   const { article, setArticle } = props;
-
   const onUploadImg = async (
     files: File[],
     callback: (arg0: any[]) => void
@@ -45,44 +45,24 @@ const Article = observer((props: Iprops) => {
   return (
     <div className="page-ctn">
       <div className="article-ctn">
-        <div
-          style={{ display: `${store.edit ? "none" : "block"}`, width: "100%" }}
-        >
-          <MdEditor
-            className="editor"
-            editorId={"editor"}
-            modelValue={article.article}
-            theme="light"
-            onUploadImg={onUploadImg}
-            onChange={(text) => {
-              setArticle({ ...article, article: text });
-            }}
-            tableShape={[5, 10]}
-            onSave={(p) => {
-              store.setDraft(article);
-            }}
-            autoDetectCode={true}
-            previewTheme="smart-blue"
-            footers={["=", "markdownTotal"]}
-            toolbarsExclude={toolbarsExclude}
-          />
-        </div>
-        <div
-          style={{ display: `${store.edit ? "block" : "none"}`, width: "100%" }}
-        >
-          <MdEditor
-            className="editor"
-            editorId={"preview"}
-            modelValue={article.article}
-            theme="light"
-            previewTheme="smart-blue"
-            previewOnly={true}
-            toolbarsExclude={toolbarsExclude}
-          />
-        </div>
+        <MdEditor
+          className="editor"
+          editorId={"editor"}
+          modelValue={article.article}
+          theme="light"
+          onUploadImg={onUploadImg}
+          onChange={(text) => {
+            setArticle({ ...article, article: text });
+          }}
+          tableShape={[5, 6]}
+          autoDetectCode={true}
+          previewTheme={store.theme}
+          footers={["=", "markdownTotal"]}
+          toolbarsExclude={toolbarsExclude}
+        />
       </div>
     </div>
   );
 });
 
-export default Article;
+export default Editor;

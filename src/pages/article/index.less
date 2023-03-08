@@ -1,62 +1,79 @@
 .article-list-ctn {
   width: 100%;
 
+  img:hover {
+    filter: drop-shadow(1px 1px 1px #1777ff56);
+  }
+
   .layout {
     display: flex;
     flex-direction: row;
 
     .logo {
       height: 100px;
-      // background-image: url("@/assets/logo.png");
       background-color: #999;
       background-size: contain;
     }
 
     .sider {
-      // flex: 1;
-      padding-top: 30px;
       max-width: 250px;
       margin-right: 8px;
       transition: left 0.3s cubic-bezier(0.2, 0, 0, 1) 0s;
       box-shadow: 1px 0px 10px #ddd;
 
       .menu {
-        height: calc(96vh - 30px);
+        height: calc(99vh - 30px);
         overflow-y: scroll
       }
 
 
-      &::after {
+      .toggle-btn {
         position: absolute;
         top: 44vh;
         width: 16px;
         height: 70px;
         content: '';
         background-size: cover;
-
       }
     }
 
     .opened {
       min-width: 250px;
+      display: block;
 
-      &::after {
+      .toggle-btn {
         left: 250px;
         background-image: url("@/assets/svg/fold.svg");
       }
     }
 
     .closed {
-      min-width: 80px;
+      display: none;
 
-      &::after {
-        left: 80px;
+      .toggle-btn {
+        left: 0px;
         background-image: url("@/assets/svg/unfold.svg");
+      }
+    }
+
+    .tool-bar {
+      padding: 15px 30px;
+      display: flex;
+      align-items: end;
+      justify-content: end;
+      box-shadow: 0px 1px 5px #ccc;
+
+
+      img {
+        margin-left: 10px;
+        cursor: pointer;
       }
     }
 
     .content {
       flex: 5;
+      height: 98vh;
+      overflow-y: scroll;
       transition: flex width 1s ease-in;
 
       .header {
@@ -66,7 +83,6 @@
 
         padding: 0px 30px;
         background-color: #eeeeee;
-        box-shadow: 5px 5px 5px #ddd;
 
         .left {
           display: flex;
@@ -97,10 +113,6 @@
             width: 25px;
             margin-left: 15px;
             cursor: pointer;
-
-            &:hover {
-              filter: drop-shadow(0 0 2em #61dafb);
-            }
           }
         }
       }

@@ -1,12 +1,38 @@
-.rgst-ctn {
-  width: 100%;
-  height: calc(100vh - 100px);
+.rgst-body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
   overflow-y: scroll;
+  background-image: url("@/assets/login-bg.jpeg");
+  background-size: 100% 100%;
 
-  .form-style {
-    margin-top: 50px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+  .rgst-ctn {
+    width: 600px;
+    height: 500px;
+    background-color: rgba(255, 255, 255, 0.7);
+    box-shadow: 0px 0px 5px #fff;
+
+    .form-style {
+      margin: 50px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+
+      .avatar-ctn {
+        display: flex;
+        flex-direction: row;
+        color: #1777ff;
+        align-items: center;
+        cursor: pointer;
+
+
+        img {
+          margin-right: 30px;
+        }
+      }
+
+    }
   }
+
 }
