@@ -199,7 +199,13 @@ const ArticleHeader = observer((props: Iprops) => {
     <>
       <div className="header">
         <div className="left">
-          <div className="title">{article?.title}</div>
+          <div className="title">
+            {editFlag ? (
+              article?.title
+            ) : (
+              <input defaultValue={article?.title} className="title" />
+            )}
+          </div>
           <div className="description">{`作者: ${
             article.authorName
           } 创建时间: ${moment(article?.timeCreated).format(

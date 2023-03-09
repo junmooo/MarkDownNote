@@ -8,6 +8,8 @@ export async function upload(params: FormData) {
   });
   if (res?.code === 1) {
     return Promise.resolve(res?.data || []);
+  } else {
+    return Promise.reject(res);
   }
 }
 export async function uploads(params: FormData) {

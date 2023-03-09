@@ -12,8 +12,8 @@ const Login = observer(() => {
   const { loading, run } = useRequest(auth.login, {
     manual: true,
     onSuccess: (res) => {
-      localStorage.setItem("userInfo", JSON.stringify(res?.user));
-      localStorage.setItem("token", res?.token);
+      localStorage.setItem("userInfo", JSON.stringify(res?.data.user));
+      localStorage.setItem("token", res?.data.token);
       messageApi.open({
         type: "success",
         content: "登陆成功",

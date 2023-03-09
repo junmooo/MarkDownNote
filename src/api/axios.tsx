@@ -57,7 +57,7 @@ function request(
 ) {
   const service = axios.create({
     // baseURL: "http://127.0.0.1:8088/",
-    baseURL: "http://124.222.27.22:8088/",
+    baseURL: "https://qingbing.top/api/",
     timeout: 60000,
   });
 
@@ -95,10 +95,10 @@ function request(
       let errMsg = error;
       if (error.response?.status === 403) {
         errMsg = "token 失效";
+        window.location.href = "/login";
       } else {
         localStorage.clear();
       }
-      window.location.href = "/login";
       return Promise.reject(errMsg);
     }
   );
