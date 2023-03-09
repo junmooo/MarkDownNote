@@ -1,4 +1,4 @@
-import moment from "moment";
+import moment, { duration } from "moment";
 import store from "@/mobx";
 import { observer } from "mobx-react";
 import addIcon from "@/assets/svg/add.svg";
@@ -12,12 +12,13 @@ import exitIcon from "@/assets/svg/exit.svg";
 import magicIcon from "@/assets/svg/magic.svg";
 import { ExclamationCircleFilled } from "@ant-design/icons";
 import { Modal, Tooltip, message } from "antd";
-import { useBoolean, useRequest } from "ahooks";
+import { useRequest } from "ahooks";
 import { del, save } from "@/api/article";
 import Upload from "@/components/common/upload";
-import React, { LegacyRef, useEffect, useRef, useState } from "react";
-import ArticleConfirmDialog from "./ArticleConfirmDialog";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { exportMdNote } from "@/utils/common";
+import { type } from "os";
 const { confirm } = Modal;
 type Iprops = {
   article: Article;
@@ -31,8 +32,8 @@ type Iprops = {
 const ArticleHeader = observer((props: Iprops) => {
   const [messageApi, contextHolder] = message.useMessage();
   const { article, setArticle, treeData, getArticle, runSaveTree } = props;
-  const [showDialog, { toggle }] = useBoolean(false);
   const [href, setHref] = useState("#");
+  const [title, setTitle] = useState(article.title || "未命名");
   const userInfo = JSON.parse(localStorage.getItem("userInfo") || "{}");
   const navigate = useNavigate();
   const uploadRef = useRef<HTMLDivElement>();
@@ -43,6 +44,7 @@ const ArticleHeader = observer((props: Iprops) => {
     setHref(
       URL.createObjectURL(new Blob([article.article], { type: "text/plain" }))
     );
+    setTitle(article.title || "未命名");
   }, [article]);
 
   const showDeleteConfirm = () => {
@@ -123,7 +125,6 @@ const ArticleHeader = observer((props: Iprops) => {
         authorId: userInfo.id,
         authorName: userInfo.name,
       });
-      toggle();
     };
     reader.onerror = function () {
       console.log("读取失败", reader.error);
@@ -177,11 +178,8 @@ const ArticleHeader = observer((props: Iprops) => {
         findAndUpdateTreeData(treeData.tree);
       }
       // 更新 user article tree
-
       // 切换编辑模式/预览模式
       store.setEditTrue();
-      // 关闭弹窗
-      toggle();
     },
     onError: (err) => {
       messageApi.open({
@@ -192,9 +190,6 @@ const ArticleHeader = observer((props: Iprops) => {
     },
   });
 
-  const onConfirm = () => {
-    runSave({ ...article });
-  };
   return (
     <>
       <div className="header">
@@ -203,7 +198,13 @@ const ArticleHeader = observer((props: Iprops) => {
             {editFlag ? (
               article?.title
             ) : (
-              <input defaultValue={article?.title} className="title" />
+              <input
+                defaultValue={title}
+                className="title"
+                onChange={(e) => {
+                  setTitle(e.target.value);
+                }}
+              />
             )}
           </div>
           <div className="description">{`作者: ${
@@ -219,8 +220,9 @@ const ArticleHeader = observer((props: Iprops) => {
                 src={saveIcon}
                 alt="save"
                 onClick={() => {
-                  setArticle(article);
-                  toggle();
+                  const tempArticle = { ...article, title };
+                  setArticle(tempArticle);
+                  runSave(tempArticle);
                 }}
               />
             </Tooltip>
@@ -291,7 +293,22 @@ const ArticleHeader = observer((props: Iprops) => {
                   src={exportIcon}
                   alt="export"
                   onClick={() => {
-                    aRef.current.click();
+                    exportMdNote(title + ".md", article.article)
+                      .then(() => {
+                        messageApi.open({
+                          type: "success",
+                          content:
+                            "导出成功，默认导出到桌面上markdowns文件夹下",
+                          duration: 3,
+                        });
+                      })
+                      .catch(() => {
+                        messageApi.open({
+                          type: "error",
+                          content: "导出失败",
+                          duration: 3,
+                        });
+                      });
                   }}
                 />
               </Tooltip>
@@ -312,15 +329,6 @@ const ArticleHeader = observer((props: Iprops) => {
         onCheck={(msg) => {
           messageApi.open({ type: "error", content: msg, duration: 2 });
         }}
-      />
-      <ArticleConfirmDialog
-        visible={showDialog}
-        onCancel={toggle}
-        onConfirm={onConfirm}
-        article={article}
-        setArticle={setArticle}
-        title={"标题"}
-        isFolder={false}
       />
       <a
         ref={aRef}

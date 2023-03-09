@@ -91,7 +91,6 @@ function request(
       return response.data;
     },
     (error) => {
-      debugger;
       localStorage.clear();
       error.config && removePending(error.config);
       let errMsg = error;

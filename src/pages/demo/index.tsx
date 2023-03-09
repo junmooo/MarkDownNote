@@ -1,10 +1,18 @@
 import React, { useState } from "react";
 import { Button, Tree, message } from "antd";
 import { hello } from "@/api/hello";
+import { useNavigate } from "react-router-dom";
+import {
+  exists,
+  writeTextFile,
+  BaseDirectory,
+  createDir,
+} from "@tauri-apps/api/fs";
+import { appDataDir } from "@tauri-apps/api/path";
 
 const App: React.FC = () => {
   const [messageApi, contextHolder] = message.useMessage();
-
+  const navigate = useNavigate();
   const [data, setData] = useState("hahahahah");
 
   return (
@@ -12,7 +20,7 @@ const App: React.FC = () => {
       <div>{data}</div>
       <Button
         onClick={() => {
-          hello({})
+          hello({ data: "xixixi" })
             .then((res) => {
               setData("res:" + JSON.stringify(res));
             })
@@ -41,6 +49,36 @@ const App: React.FC = () => {
       >
         get
       </Button>
+      <Button
+        onClick={() => {
+          navigate("/articles");
+        }}
+        type="link"
+      >
+        articles
+      </Button>
+      <Button
+        onClick={async () => {
+          const isexists = await exists("markdowns", {
+            dir: BaseDirectory.Desktop,
+          });
+          console.log("isexists", isexists);
+          if (!isexists) {
+            await createDir("markdowns", {
+              dir: BaseDirectory.Desktop,
+              recursive: true,
+            });
+          }
+          await writeTextFile("markdowns/app.conf", "file contents", {
+            dir: BaseDirectory.Desktop,
+          }).then((res) => {
+            console.log("导出成功，默认导出到桌面上的markdowns文件夹下");
+          });
+        }}
+      >
+        writeTextFile
+      </Button>
+
       {contextHolder}
     </div>
   );

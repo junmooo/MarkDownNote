@@ -21,6 +21,13 @@
         "all": true,
         "request": false,
         "scope": ["http://**", "https://**"]
+      },
+      "fs": {
+        "all": true,
+        "scope": ["$DESKTOP/markdowns/*", "$DESKTOP/*"]
+      },
+      "path": {
+        "all": true
       }
     },
     "bundle": {
@@ -50,7 +57,23 @@
         "minWidth": 800,
         "width": 1200,
         "height": 700,
-        "minHeight": 600
+        "minHeight": 600,
+        "center": true,
+        "visible": false,
+        "label": "main"
+      },
+      {
+        "fullscreen": false,
+        "fileDropEnabled": false,
+        "resizable": true,
+        "title": "MarkDown Note",
+        "minWidth": 800,
+        "width": 1200,
+        "height": 700,
+        "minHeight": 600,
+        "center": true,
+        "url": "splash_screen.html",
+        "label": "splash_screen"
       }
     ]
   }

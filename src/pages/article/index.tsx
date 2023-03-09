@@ -9,6 +9,8 @@ import Editor from "./modules/Editor";
 import Preview from "./modules/Preview";
 import ArticleHeader from "./modules/ArticleHeader";
 import Sider from "./modules/Sider";
+// With the Tauri API npm package:
+import { invoke } from "@tauri-apps/api/tauri";
 
 const AriticleList = observer(() => {
   const [messageApi, contextHolder] = message.useMessage();
@@ -36,6 +38,10 @@ const AriticleList = observer(() => {
       },
     }
   );
+
+  useEffect(() => {
+    invoke("close_splashscreen");
+  }, []);
 
   // 通过用户id获取 tree
   const { loading: loadingTree, run: getTrees } = useRequest(getTreeByUid, {

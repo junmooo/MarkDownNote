@@ -8,8 +8,8 @@ export const toolbarsExclude: ToolbarNames[] = [
   // "=",
   "github",
   "catalog",
-  "preview",
-  "fullscreen",
+  // "preview",
+  // "fullscreen",
   "pageFullscreen",
 ];
 
