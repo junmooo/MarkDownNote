@@ -5,23 +5,34 @@ import store from "@/mobx";
 import { observer } from "mobx-react";
 import { toolbarsExclude } from "../contants";
 import "./article.less";
-import * as cheerio from "cheerio";
+import { WebviewWindow } from "@tauri-apps/api/window";
+import { message } from "antd";
 interface Iprops {
   article: Article;
 }
 
 const Preview = observer((props: Iprops) => {
+  const [messageApi, contextHolder] = message.useMessage();
+
   const { article } = props;
+
+  const aOnClick = (e: any) => {
+    const url = e.target.href;
+    if (url && !url.toLowerCase()?.includes("localhost")) {
+      e.preventDefault();
+      new WebviewWindow("external_view", {
+        url,
+        width: 1400,
+        height: 700,
+        title: "外部链接",
+      });
+    }
+  };
 
   return (
     <div className="page-ctn">
-      <div className="article-ctn">
+      <div className="article-ctn" onClick={aOnClick}>
         <MdEditor
-          sanitize={(html) => {
-            console.log("html", html);
-            let $ = cheerio.load(html);
-            return "hahaha";
-          }}
           className="editor"
           editorId={"preview"}
           modelValue={article.article}
@@ -31,6 +42,7 @@ const Preview = observer((props: Iprops) => {
           toolbarsExclude={toolbarsExclude}
         />
       </div>
+      {contextHolder}
     </div>
   );
 });

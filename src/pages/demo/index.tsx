@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Tree, message } from "antd";
 import { hello } from "@/api/hello";
 import { useNavigate } from "react-router-dom";
@@ -8,12 +8,16 @@ import {
   BaseDirectory,
   createDir,
 } from "@tauri-apps/api/fs";
-import { appDataDir } from "@tauri-apps/api/path";
-
+import { WebviewWindow } from "@tauri-apps/api/window";
+import { invoke } from "@tauri-apps/api/tauri";
 const App: React.FC = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const navigate = useNavigate();
   const [data, setData] = useState("hahahahah");
+
+  useEffect(() => {
+    invoke("close_splashscreen");
+  }, []);
 
   return (
     <div>
@@ -77,6 +81,26 @@ const App: React.FC = () => {
         }}
       >
         writeTextFile
+      </Button>
+      <Button
+        onClick={async () => {
+          const webview = new WebviewWindow("theUniqueLabel", {
+            url: "https://baidu.com/",
+            width: 1400,
+            height: 700,
+            title: "外部链接",
+          });
+          // since the webview window is created asynchronously,
+          // Tauri emits the `tauri://created` and `tauri://error` to notify you of the creation response
+          webview.once("tauri://created", function () {
+            // webview window successfully created
+          });
+          webview.once("tauri://error", function (e) {
+            // an error occurred during webview window creation
+          });
+        }}
+      >
+        打开外部窗口
       </Button>
 
       {contextHolder}

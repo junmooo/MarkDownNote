@@ -8,6 +8,8 @@ import "./article.less";
 import { observer } from "mobx-react";
 import { toolbarsExclude } from "../contants";
 import { useState } from "react";
+import { WebviewWindow } from "@tauri-apps/api/window";
+import { throttle } from "lodash";
 interface Iprops {
   article: Article;
   setArticle: (article: Article) => void;
@@ -15,36 +17,57 @@ interface Iprops {
 
 const Editor = observer((props: Iprops) => {
   const { article, setArticle } = props;
-  const onUploadImg = async (
-    files: File[],
-    callback: (arg0: any[]) => void
-  ) => {
-    const res = await Promise.all(
-      files.map((file) => {
-        const m = 1024 * 1024;
-        let quality = 1;
-        if (file.size > 8 * m) quality = 0.3;
-        else if (file.size > 5 * m) quality = 0.4;
-        else if (file.size > 2 * m) quality = 0.6;
-        return new Promise((rev, rej) => {
-          const form = new FormData();
-          FileUtils.fileResizeToFile(file, quality, (res: File) => {
-            form.append("file", res);
-            upload(form)
-              .then((res) => {
-                rev(res);
-              })
-              .catch((error) => rej(error));
-          });
-        });
-      })
-    );
-    callback(res.map((item: any) => item?.url));
-  };
 
+  const onUploadImg = throttle(
+    async (files: File[], callback: (arg0: any[]) => void) => {
+      console.log("00000000000000000000000000", files);
+
+      const res = await Promise.all(
+        files.map((file) => {
+          console.log("11111111111111111111111111111", file);
+          const m = 1024 * 1024;
+          let quality = 1;
+          if (file.size > 8 * m) quality = 0.2;
+          else if (file.size > 5 * m) quality = 0.3;
+          else if (file.size > 2 * m) quality = 0.6;
+          return new Promise((rev, rej) => {
+            const form = new FormData();
+            FileUtils.fileResizeToFile(file, quality, (res: File) => {
+              console.log("2222222222222222222222222", res);
+              form.append("file", res);
+              upload(form)
+                .then((res) => {
+                  rev(res);
+                })
+                .catch((error) => rej(error));
+            });
+          });
+        })
+      );
+      callback(
+        res.map((item: any) => {
+          return item?.url;
+        })
+      );
+    },
+    1000,
+    { trailing: false }
+  );
+  const aOnClick = (e: any) => {
+    const url = e.target.href;
+    if (url && !url.toLowerCase()?.includes("localhost")) {
+      e.preventDefault();
+      new WebviewWindow("external_view", {
+        url,
+        width: 1400,
+        height: 700,
+        title: "外部链接",
+      });
+    }
+  };
   return (
     <div className="page-ctn">
-      <div className="article-ctn">
+      <div className="article-ctn" onClick={aOnClick}>
         <MdEditor
           className="editor"
           editorId={"editor"}

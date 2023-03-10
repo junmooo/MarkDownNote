@@ -9,7 +9,6 @@ import Editor from "./modules/Editor";
 import Preview from "./modules/Preview";
 import ArticleHeader from "./modules/ArticleHeader";
 import Sider from "./modules/Sider";
-// With the Tauri API npm package:
 import { invoke } from "@tauri-apps/api/tauri";
 
 const AriticleList = observer(() => {
@@ -79,12 +78,12 @@ const AriticleList = observer(() => {
   });
 
   const getArticle = (p: { id: string }) => {
-    const article = JSON.parse(localStorage.getItem(p.id) || "null");
-    if (article) {
-      setArticle(article);
-    } else {
-      run(p);
-    }
+    // const article = JSON.parse(localStorage.getItem(p.id) || "null");
+    // if (article) {
+    //   setArticle(article);
+    // } else {
+    run(p);
+    // }
   };
 
   useEffect(() => {

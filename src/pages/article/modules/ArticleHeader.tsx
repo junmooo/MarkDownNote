@@ -199,7 +199,7 @@ const ArticleHeader = observer((props: Iprops) => {
               article?.title
             ) : (
               <input
-                defaultValue={title}
+                value={title}
                 className="title"
                 onChange={(e) => {
                   setTitle(e.target.value);
@@ -260,6 +260,7 @@ const ArticleHeader = observer((props: Iprops) => {
                     authorId: userInfo?.id,
                     authorName: userInfo?.name,
                   });
+                  // setTitle("未命名");
                   store.setEditFalse();
                 }}
               />

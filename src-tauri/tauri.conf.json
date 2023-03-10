@@ -42,6 +42,10 @@
       "identifier": "com.qingbing",
       "targets": "all"
     },
+    "systemTray": {
+      "iconPath": "icons/icon.png",
+      "iconAsTemplate": true
+    },
     "security": {
       "csp": null
     },
@@ -54,8 +58,8 @@
         "fileDropEnabled": false,
         "resizable": true,
         "title": "MarkDown Note",
-        "minWidth": 800,
-        "width": 1200,
+        "minWidth": 1430,
+        "width": 1430,
         "height": 700,
         "minHeight": 600,
         "center": true,
@@ -64,7 +68,7 @@
       },
       {
         "decorations": false,
-        "resizable": true,
+        "resizable": false,
         "title": "MarkDown Note",
         "width": 600,
         "height": 400,
