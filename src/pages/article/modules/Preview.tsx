@@ -5,6 +5,7 @@ import store from "@/mobx";
 import { observer } from "mobx-react";
 import { toolbarsExclude } from "../contants";
 import "./article.less";
+import * as cheerio from "cheerio";
 interface Iprops {
   article: Article;
 }
@@ -16,6 +17,11 @@ const Preview = observer((props: Iprops) => {
     <div className="page-ctn">
       <div className="article-ctn">
         <MdEditor
+          sanitize={(html) => {
+            console.log("html", html);
+            let $ = cheerio.load(html);
+            return "hahaha";
+          }}
           className="editor"
           editorId={"preview"}
           modelValue={article.article}

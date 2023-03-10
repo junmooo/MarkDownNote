@@ -63,14 +63,11 @@
         "label": "main"
       },
       {
-        "fullscreen": false,
-        "fileDropEnabled": false,
+        "decorations": false,
         "resizable": true,
         "title": "MarkDown Note",
-        "minWidth": 800,
-        "width": 1200,
-        "height": 700,
-        "minHeight": 600,
+        "width": 600,
+        "height": 400,
         "center": true,
         "url": "splash_screen.html",
         "label": "splash_screen"
