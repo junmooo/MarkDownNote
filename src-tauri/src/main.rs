@@ -22,8 +22,8 @@ fn close_splashscreen(window: tauri::Window) {
 }
 
 fn main() {
-    let quit = CustomMenuItem::new("quit".to_string(), "Quit");
-    let hide = CustomMenuItem::new("hide".to_string(), "Hide");
+    let quit = CustomMenuItem::new("quit".to_string(), "退出");
+    let hide = CustomMenuItem::new("hide".to_string(), "隐藏");
     let tray_menu = SystemTrayMenu::new()
         .add_item(quit)
         .add_native_item(SystemTrayMenuItem::Separator)
@@ -37,7 +37,9 @@ fn main() {
                 size: _,
                 ..
             } => {
-                println!("system tray received a left click");
+                let window = app.get_window("main").unwrap();
+                window.show().unwrap();
+                window.set_focus().unwrap();
             }
             SystemTrayEvent::RightClick {
                 position: _,
@@ -54,10 +56,10 @@ fn main() {
                 println!("system tray received a double click");
             }
             SystemTrayEvent::MenuItemClick { id, .. } => match id.as_str() {
-                "退出" => {
+                "quit" => {
                     std::process::exit(0);
                 }
-                "隐藏" => {
+                "hide" => {
                     let window = app.get_window("main").unwrap();
                     window.hide().unwrap();
                 }
