@@ -26,7 +26,13 @@ function request(axiosConfig: Config) {
     (config: Config | any) => {
       // 自动携带token
       const token = localStorage.getItem("token");
-      if ((!token && config.url === "/login") || config.url === "/register") {
+      console.log("config.ur", config.url);
+
+      if (
+        !token &&
+        config.url !== "/user/login" &&
+        config.url !== "/user/register"
+      ) {
         window.location.href = "/login";
       }
       config.headers.token = token;
