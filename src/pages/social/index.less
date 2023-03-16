@@ -4,16 +4,21 @@
   overflow-wrap: break-word;
 
   .header {
+    position: fixed;
     height: 64px;
     background-color: #fefefe;
     display: flex;
     // justify-content: center;
     align-items: center;
+    z-index: 10;
 
     .home {
       display: flex;
       flex-direction: row;
-      margin-left: 20px;
+      justify-content: space-between;
+      margin: 0 40px;
+      width: calc(100vw - 80px);
+      // padding: 0 30px;
 
       img {
         width: 28px;
@@ -32,7 +37,8 @@
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
-    padding: 15px;
+    padding: 64px 25px 0;
+
 
     .card {
       padding: 15px;
@@ -42,10 +48,10 @@
         display: flex;
         flex-direction: row;
         justify-content: space-between;
+        height: 180px;
 
         .left {
           display: flex;
-
           flex-direction: column;
 
           .avatar {
@@ -75,13 +81,25 @@
 
         }
 
-        img {
-          width: 150px;
+        .card-img {
+          margin-left: 20px;
+          max-width: 250px;
           object-fit: cover;
-          height: 100px;
+          max-height: 250px;
         }
       }
     }
   }
 
+  .more {
+    width: 20vw;
+    background-image: linear-gradient(white, #eee);
+    text-align: center;
+    margin: 0 40vw;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: bold;
+    color: #666;
+  }
 }

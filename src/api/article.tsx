@@ -63,3 +63,10 @@ export async function getArticleById(params: any) {
     return Promise.resolve(res?.data || []);
   }
 }
+export async function searchArticle(params: any) {
+  return await request({
+    url: `/article/search`,
+    method: "get",
+    params,
+  });
+}

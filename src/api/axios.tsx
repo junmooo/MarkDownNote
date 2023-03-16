@@ -17,8 +17,8 @@ type Config = {
 
 function request(axiosConfig: Config) {
   const service = axios.create({
-    // baseURL: "http://127.0.0.1:8088/",
-    baseURL: "https://qingbing.top/api/",
+    baseURL: "http://127.0.0.1:8088/",
+    // baseURL: "https://qingbing.top/api/",
     timeout: 60000,
   });
 
@@ -26,7 +26,6 @@ function request(axiosConfig: Config) {
     (config: Config | any) => {
       // 自动携带token
       const token = localStorage.getItem("token");
-      console.log("config.ur", config.url);
 
       if (
         !token &&

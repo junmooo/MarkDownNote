@@ -10,6 +10,8 @@ import {
 } from "@tauri-apps/api/fs";
 import { WebviewWindow } from "@tauri-apps/api/window";
 import { invoke } from "@tauri-apps/api/tauri";
+import { emit, listen } from "@tauri-apps/api/event";
+
 const App: React.FC = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const navigate = useNavigate();
@@ -18,6 +20,10 @@ const App: React.FC = () => {
   useEffect(() => {
     invoke("close_splashscreen");
   }, []);
+
+  listen("emitArticle", (event: any) => {
+    console.log("event", event.payload?.article);
+  });
 
   return (
     <div>
@@ -94,6 +100,9 @@ const App: React.FC = () => {
           // Tauri emits the `tauri://created` and `tauri://error` to notify you of the creation response
           webview.once("tauri://created", function () {
             // webview window successfully created
+            emit("emitArticle", {
+              article: "hshshshshshshshsh",
+            });
           });
           webview.once("tauri://error", function (e) {
             // an error occurred during webview window creation

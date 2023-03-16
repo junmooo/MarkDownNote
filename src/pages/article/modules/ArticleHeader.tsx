@@ -11,14 +11,14 @@ import exportIcon from "@/assets/svg/export.svg";
 import exitIcon from "@/assets/svg/exit.svg";
 import magicIcon from "@/assets/svg/magic.svg";
 import { ExclamationCircleFilled } from "@ant-design/icons";
-import { Modal, Tooltip, message } from "antd";
+import { Modal, Switch, Tooltip, message } from "antd";
 import { useRequest } from "ahooks";
 import { del, save } from "@/api/article";
 import Upload from "@/components/common/upload";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { exportMdNote } from "@/utils/common";
-import { type } from "os";
+
 const { confirm } = Modal;
 type Iprops = {
   article: Article;
@@ -33,7 +33,6 @@ const ArticleHeader = observer((props: Iprops) => {
   const [messageApi, contextHolder] = message.useMessage();
   const { article, setArticle, treeData, getArticle, runSaveTree } = props;
   const [href, setHref] = useState("#");
-  const [title, setTitle] = useState(article.title || "未命名");
   const userInfo = JSON.parse(localStorage.getItem("userInfo") || "{}");
   const navigate = useNavigate();
   const uploadRef = useRef<HTMLDivElement>();
@@ -44,20 +43,36 @@ const ArticleHeader = observer((props: Iprops) => {
     setHref(
       URL.createObjectURL(new Blob([article.article], { type: "text/plain" }))
     );
-    setTitle(article.title || "未命名");
   }, [article]);
 
+  const ifNodeHasChild = (items: any[]) => {
+    for (let i = 0; i < items.length; i++) {
+      if (items[i].key === article?.id) {
+        if (items[i]?.children && items[i]?.children?.length > 0) {
+          return true;
+        }
+        return false;
+      }
+      if (items[i]?.children) {
+        delFromTreeNode(items[i]?.children);
+      }
+    }
+  };
+
   const showDeleteConfirm = () => {
+    let title = "确定要删除吗?";
+    let onOk = () => runDel({ id: article?.id || "" });
+    if (ifNodeHasChild(treeData.tree)) {
+      title = "该节点下还有子节点，无法删除！";
+      onOk = () => {};
+    }
     confirm({
-      title: "确定要删除吗?",
+      title,
       icon: <ExclamationCircleFilled />,
-      content: "如果该文件下有子文件,会同时级联删除",
       okText: "确定",
       okType: "danger",
       cancelText: "取消",
-      onOk() {
-        runDel({ id: article?.id || "" });
-      },
+      onOk,
     });
   };
   const showExitConfirm = () => {
@@ -185,7 +200,7 @@ const ArticleHeader = observer((props: Iprops) => {
       messageApi.open({
         type: "error",
         duration: 2,
-        content: err.message,
+        content: "保存失败!",
       });
     },
   });
@@ -199,10 +214,11 @@ const ArticleHeader = observer((props: Iprops) => {
               article?.title
             ) : (
               <input
-                value={title}
+                value={article.title || "未命名"}
                 className="title"
                 onChange={(e) => {
-                  setTitle(e.target.value);
+                  const tempArticle = { ...article, title: e.target.value };
+                  setArticle(tempArticle);
                 }}
               />
             )}
@@ -214,58 +230,6 @@ const ArticleHeader = observer((props: Iprops) => {
           )}`}</div>
         </div>
         <div className="right">
-          {!editFlag && (
-            <Tooltip title="保存到云端" color={"gray"} key={"save"}>
-              <img
-                src={saveIcon}
-                alt="save"
-                onClick={() => {
-                  const tempArticle = { ...article, title };
-                  setArticle(tempArticle);
-                  runSave(tempArticle);
-                }}
-              />
-            </Tooltip>
-          )}
-          {editFlag && (
-            <Tooltip title="编辑" color={"gray"} key={"edit"}>
-              <img
-                src={editIcon}
-                alt="edit"
-                onClick={() => {
-                  store.setEditFalse();
-                }}
-              />
-            </Tooltip>
-          )}
-          {!editFlag && (
-            <Tooltip title="保存到草稿...tudo" color={"gray"} key={"draft"}>
-              <img
-                src={draftIcon}
-                alt="draft"
-                onClick={() => {
-                  store.setEditTrue();
-                }}
-              />
-            </Tooltip>
-          )}
-          {editFlag && (
-            <Tooltip title="新增文档" color={"gray"} key={"add"}>
-              <img
-                src={addIcon}
-                alt="add"
-                onClick={() => {
-                  setArticle({
-                    article: "# 标题",
-                    authorId: userInfo?.id,
-                    authorName: userInfo?.name,
-                  });
-                  // setTitle("未命名");
-                  store.setEditFalse();
-                }}
-              />
-            </Tooltip>
-          )}
           <Tooltip title="变换样式" color={"gray"} key={"change"}>
             <img
               src={magicIcon}
@@ -273,13 +237,91 @@ const ArticleHeader = observer((props: Iprops) => {
               onClick={() => store.nextTheme()}
             />
           </Tooltip>
-          {editFlag && (
-            <Tooltip title="删除当前文档" color={"gray"} key={"detete"}>
-              <img src={deleteIcon} alt="detete" onClick={showDeleteConfirm} />
-            </Tooltip>
+          {!editFlag && (
+            <>
+              <Tooltip title="保存到云端" color={"gray"} key={"save"}>
+                <img
+                  src={saveIcon}
+                  alt="save"
+                  onClick={() => {
+                    const tempArticle = { ...article };
+                    setArticle(tempArticle);
+                    runSave(tempArticle);
+                  }}
+                />
+              </Tooltip>
+
+              <Tooltip title="保存到草稿...tudo" color={"gray"} key={"draft"}>
+                <img
+                  src={draftIcon}
+                  alt="draft"
+                  onClick={() => {
+                    store.setEditTrue();
+                  }}
+                />
+              </Tooltip>
+              <div
+                style={{
+                  height: "64px",
+                  lineHeight: "64px",
+                  marginLeft: "15px",
+                }}
+                key={"type"}
+              >
+                <Switch
+                  size="default"
+                  checkedChildren="公开"
+                  unCheckedChildren="私有"
+                  defaultChecked={article.type === "00" ? false : true}
+                  onChange={(v) => {
+                    console.log("v", v, article.type);
+
+                    setArticle({ ...article, type: v ? "01" : "00" });
+                  }}
+                />
+              </div>
+            </>
           )}
+
           {editFlag && (
             <>
+              <Tooltip title="新增文档" color={"gray"} key={"add"}>
+                <img
+                  src={addIcon}
+                  alt="add"
+                  onClick={() => {
+                    setArticle({
+                      article: "# 标题",
+                      authorId: userInfo?.id,
+                      authorName: userInfo?.name,
+                      authorAvatar: userInfo?.avatar,
+                    });
+                    // setTitle("未命名");
+                    store.setEditFalse();
+                  }}
+                />
+              </Tooltip>
+              <Tooltip title="编辑" color={"gray"} key={"edit"}>
+                <img
+                  src={editIcon}
+                  alt="edit"
+                  onClick={() => {
+                    setArticle({
+                      ...article,
+                      authorAvatar: userInfo?.avatar,
+                    });
+                    store.setEditFalse();
+                  }}
+                />
+              </Tooltip>
+              <Tooltip title="删除当前文档" color={"gray"} key={"detete"}>
+                <img
+                  src={deleteIcon}
+                  alt="detete"
+                  onClick={showDeleteConfirm}
+                />
+              </Tooltip>
+
               <Tooltip title="导入文档" color={"gray"} key={"import"}>
                 <img
                   src={importIcon}
@@ -294,7 +336,7 @@ const ArticleHeader = observer((props: Iprops) => {
                   src={exportIcon}
                   alt="export"
                   onClick={() => {
-                    exportMdNote(title + ".md", article.article)
+                    exportMdNote(article.title + ".md", article.article)
                       .then(() => {
                         messageApi.open({
                           type: "success",

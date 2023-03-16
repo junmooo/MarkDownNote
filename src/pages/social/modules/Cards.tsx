@@ -1,23 +1,30 @@
 import { WebviewWindow } from "@tauri-apps/api/window";
 import { Card, Avatar } from "antd";
-import moment from "moment";
-const { Meta } = Card;
 
 type Iprops = {
   data: Article[];
 };
 
-function Cards(props: Iprops) {
+const Cards = (props: Iprops) => {
   const { data } = props;
+
   return (
     <div className="cards">
       {data?.map((e) => {
+        const st = e.article.indexOf("https://qingbing.top/");
+        let imgUrl = "";
+        if (st !== -1) {
+          const ed = e.article.indexOf(")", st);
+          imgUrl = e.article.substring(st, ed);
+        }
+
         return (
           <div
+            key={e.id}
             className="card"
             onClick={() => {
-              new WebviewWindow("external_view", {
-                url: "/social/preview",
+              new WebviewWindow("pre_view", {
+                url: `/social/preview?id=${e.id}`,
                 width: 1400,
                 height: 700,
                 title: "preview",
@@ -28,15 +35,21 @@ function Cards(props: Iprops) {
               <div className="card-content">
                 <div className="left">
                   <div className="avatar">
-                    <Avatar src="https://qingbing.top/imgs/0244df0b-eee2-4a9c-b28c-25f50d2a9a7c.png" />
+                    <Avatar
+                      style={{ objectFit: "cover" }}
+                      src={e.authorAvatar || ""}
+                    />
                     <span>{e.authorName}</span>
                   </div>
                   <div className="title">
                     <p>{e.title}</p>
-                    <span>{e.article.substring(0, 200) + "..."}</span>
+                    <span>
+                      {e.article.substring(0, 80) +
+                        `${e.article.length > 80 ? "..." : ""}`}
+                    </span>
                   </div>
                 </div>
-                <img src="https://qingbing.top/imgs/0244df0b-eee2-4a9c-b28c-25f50d2a9a7c.png" />
+                {imgUrl && <img src={imgUrl} className="card-img" />}
               </div>
             </Card>
           </div>
@@ -44,6 +57,6 @@ function Cards(props: Iprops) {
       })}
     </div>
   );
-}
+};
 
 export default Cards;

@@ -20,11 +20,8 @@ const Editor = observer((props: Iprops) => {
 
   const onUploadImg = throttle(
     async (files: File[], callback: (arg0: any[]) => void) => {
-      console.log("00000000000000000000000000", files);
-
       const res = await Promise.all(
         files.map((file) => {
-          console.log("11111111111111111111111111111", file);
           const m = 1024 * 1024;
           let quality = 1;
           if (file.size > 8 * m) quality = 0.2;
@@ -33,7 +30,6 @@ const Editor = observer((props: Iprops) => {
           return new Promise((rev, rej) => {
             const form = new FormData();
             FileUtils.fileResizeToFile(file, quality, (res: File) => {
-              console.log("2222222222222222222222222", res);
               form.append("file", res);
               upload(form)
                 .then((res) => {

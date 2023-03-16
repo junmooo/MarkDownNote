@@ -2,15 +2,11 @@ import { ErrMsg } from "@/types/common";
 import { makeAutoObservable } from "mobx";
 
 class Store {
-  // userInfo: UserInfo = {
-  //   // id: "447f838c-2c90-4853-8ec3-30bd7a6998ac",
-  //   // name: "junmooo",
-  // };
+  currentArticle: string = "# ssssssss15ds4a561ad65156";
 
-  // setUserInfo(info: UserInfo) {
-  //   this.userInfo = info;
-  // }
-
+  setCurrentArticle(article: string) {
+    this.currentArticle = article;
+  }
   edit: boolean = true;
 
   setEditTrue() {
@@ -31,21 +27,6 @@ class Store {
   setErrMsg(params: ErrMsg) {
     this.errMsg = params;
   }
-
-  draft: Article = {
-    title: "未命名",
-    article: "# HELLO WORLD!",
-  };
-
-  setDraft(draft: Article) {
-    this.draft = draft;
-  }
-
-  // token: string = "";
-
-  // setToken(token: string) {
-  //   this.token = token;
-  // }
 
   theme = "smart-blue";
 

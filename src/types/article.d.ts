@@ -8,6 +8,7 @@ type Article = {
   authorName?: string;
   timeCreated?: string;
   timeUpdated?: string;
+  authorAvatar?: string;
 };
 
 type ArticleTree = {
