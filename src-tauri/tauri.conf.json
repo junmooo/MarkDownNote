@@ -56,11 +56,10 @@
       {
         "fullscreen": false,
         "fileDropEnabled": false,
-        "titleBarStyle": "Overlay",
         "resizable": true,
         "title": "MarkDown Note",
-        "minWidth": 1430,
-        "width": 1430,
+        "minWidth": 800,
+        "width": 1200,
         "height": 700,
         "minHeight": 600,
         "center": true,
