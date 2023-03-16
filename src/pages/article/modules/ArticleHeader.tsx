@@ -214,8 +214,9 @@ const ArticleHeader = observer((props: Iprops) => {
               article?.title
             ) : (
               <input
-                value={article.title || "未命名"}
+                value={article.title}
                 className="title"
+                placeholder="请在此处编辑标题"
                 onChange={(e) => {
                   const tempArticle = { ...article, title: e.target.value };
                   setArticle(tempArticle);
@@ -295,8 +296,9 @@ const ArticleHeader = observer((props: Iprops) => {
                       authorId: userInfo?.id,
                       authorName: userInfo?.name,
                       authorAvatar: userInfo?.avatar,
+                      title: "",
+                      type: "00",
                     });
-                    // setTitle("未命名");
                     store.setEditFalse();
                   }}
                 />
