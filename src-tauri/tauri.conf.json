@@ -21,6 +21,13 @@
         "all": true,
         "request": false,
         "scope": ["http://**", "https://**"]
+      },
+      "fs": {
+        "all": true,
+        "scope": ["$DESKTOP/markdowns/*", "$DESKTOP/*"]
+      },
+      "path": {
+        "all": true
       }
     },
     "bundle": {
@@ -35,6 +42,10 @@
       "identifier": "com.qingbing",
       "targets": "all"
     },
+    "systemTray": {
+      "iconPath": "icons/icon.png",
+      "iconAsTemplate": true
+    },
     "security": {
       "csp": null
     },
@@ -44,12 +55,26 @@
     "windows": [
       {
         "fullscreen": false,
+        "fileDropEnabled": false,
         "resizable": true,
         "title": "MarkDown Note",
         "minWidth": 800,
         "width": 1200,
         "height": 700,
-        "minHeight": 600
+        "minHeight": 600,
+        "center": true,
+        "visible": false,
+        "label": "main"
+      },
+      {
+        "decorations": false,
+        "resizable": false,
+        "title": "MarkDown Note",
+        "width": 600,
+        "height": 400,
+        "center": true,
+        "url": "splash_screen.html",
+        "label": "splash_screen"
       }
     ]
   }

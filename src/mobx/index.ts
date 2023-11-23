@@ -2,14 +2,11 @@ import { ErrMsg } from "@/types/common";
 import { makeAutoObservable } from "mobx";
 
 class Store {
-  userInfo: UserInfo = {
-    name: "",
-  };
+  currentArticle: string = "# ssssssss15ds4a561ad65156";
 
-  setUserInfo(info: UserInfo) {
-    this.userInfo = info;
+  setCurrentArticle(article: string) {
+    this.currentArticle = article;
   }
-
   edit: boolean = true;
 
   setEditTrue() {
@@ -31,19 +28,28 @@ class Store {
     this.errMsg = params;
   }
 
-  draft: Article = {
-    title: "未命名",
-    article: "# HELLO WORLD!",
-  };
+  theme = "smart-blue";
 
-  setDraft(draft: Article) {
-    this.draft = draft;
-  }
-
-  token: string = "";
-
-  setToken(token: string) {
-    this.token = token;
+  nextTheme() {
+    const themes = [
+      "default",
+      "github",
+      "vuepress",
+      "mk-cute",
+      "smart-blue",
+      "cyanosis",
+    ];
+    for (let i = 0; i < themes.length; i++) {
+      if (themes[i] === this.theme) {
+        if (i < themes.length - 1) {
+          this.theme = themes[i + 1];
+          return;
+        } else {
+          this.theme = themes[0];
+          return;
+        }
+      }
+    }
   }
 
   constructor() {

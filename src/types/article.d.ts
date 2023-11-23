@@ -8,4 +8,14 @@ type Article = {
   authorName?: string;
   timeCreated?: string;
   timeUpdated?: string;
+  authorAvatar?: string;
+};
+
+type ArticleTree = {
+  id: string;
+  tree: string;
+  ownerId: string;
+  comment?: string;
+  timeCreated?: string;
+  timeUpdated?: string;
 };

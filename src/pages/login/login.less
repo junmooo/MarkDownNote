@@ -1,15 +1,38 @@
-.login-container {
-  width: 100%;
-  height: calc(100vh - 100px);
-  background-image: url("@/assets/login-bg.jpeg");
-  background-position: center;
+.login-body {
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 100vh;
+  overflow-y: hidden;
 
-  .submit-bar {
+  .bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-image: url("@/assets/login-bg.jpeg");
+    background-size: 100% 100%;
+    background-color: rgba(255, 255, 255, 0.9);
+    z-index: -100;
+    filter: blur(4px);
+  }
+
+  .login-container {
+    padding-top: 40px;
+    width: 600px;
+    height: 300px;
+    background-color: rgba(255, 255, 255, 0.7);
+    box-shadow: 0px 0px 5px #fff;
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+
+    .submit-bar {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+    }
   }
 }

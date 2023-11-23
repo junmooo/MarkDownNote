@@ -3,18 +3,25 @@ import { md5 } from "@/utils/md5";
 
 const login = async (params: LoginParam) => {
   params.pwd = md5(params.pwd || "");
-  const res = await request({
+  return await request({
     url: `/user/login`,
     method: "POST",
     data: { ...params },
   });
-  return Promise.resolve(res?.data || {});
 };
 
 const register = async (params: UserInfo) => {
   params.pwd = md5(params.pwd || "");
   return await request({
     url: `/user/register`,
+    method: "POST",
+    data: { ...params },
+  });
+};
+
+const updateUserArticleTree = async (params: any) => {
+  return await request({
+    url: `/user/updateUserArticleTree`,
     method: "POST",
     data: { ...params },
   });
@@ -28,9 +35,10 @@ const getName = async (params: UserInfo) => {
   });
 };
 
-const auth = {
+const user = {
   login,
   register,
   getName,
+  updateUserArticleTree,
 };
-export default auth;
+export default user;
