@@ -1,5 +1,6 @@
 import { WebviewWindow } from "@tauri-apps/api/window";
 import { Card, Avatar } from "antd";
+import moment from "moment";
 
 type Iprops = {
   data: Article[];
@@ -34,19 +35,22 @@ const Cards = (props: Iprops) => {
             <Card>
               <div className="card-content">
                 <div className="left">
-                  <div className="avatar">
-                    <Avatar
-                      style={{ objectFit: "cover" }}
-                      src={e.authorAvatar || ""}
-                    />
-                    <span>{e.authorName}</span>
-                  </div>
                   <div className="title">
                     <p>{e.title}</p>
                     <span>
-                      {e.article.substring(0, 80) +
+                      {e.article.substring(0, 180) +
                         `${e.article.length > 80 ? "..." : ""}`}
                     </span>
+                  </div>
+                  <div className="avatar">
+                    <Avatar
+                      style={{ objectFit: "cover" }}
+                      size={"small"}
+                      src={e.authorAvatar || ""}
+                    />
+                    <span>{` ${e.authorName} / ${moment(e.timeCreated).format(
+                      "yyyy-MM-DD hh:mm:ss"
+                    )}`}</span>
                   </div>
                 </div>
                 {imgUrl && <img src={imgUrl} className="card-img" />}

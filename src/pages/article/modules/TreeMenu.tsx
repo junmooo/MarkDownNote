@@ -1,5 +1,5 @@
 import React, { Key } from "react";
-import { Tree } from "antd";
+import { Card, Tag, Tree } from "antd";
 
 import { observer } from "mobx-react";
 import type { DataNode, TreeProps } from "antd/es/tree";
@@ -94,6 +94,9 @@ const TreeModal = observer((props: Iprops) => {
         blockNode
         onDrop={onDrop}
         treeData={treeData?.tree || []}
+        titleRender={(data: any) => {
+          return <div className="tree-node">{data?.title}</div>;
+        }}
       />
     </div>
   );

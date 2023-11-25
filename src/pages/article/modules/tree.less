@@ -1,6 +1,13 @@
 .tree-modal {
-  height: 300px;
-  max-height: 400px;
   margin: 30px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  inline-size: 235px;
+  inset-inline-start: -18px;
+  block-size: calc(100vh - 150px);
+  position: relative;
 
+  .tree-node {
+    box-shadow: 10px 10px #ccc;
+  }
 }

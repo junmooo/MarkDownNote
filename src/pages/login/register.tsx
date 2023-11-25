@@ -33,7 +33,7 @@ function Register(props: registerType) {
       .then((values) => {
         values.avatar = avatar;
         auth.register(values).then(() => {
-          // navigate("/login");
+          navigate("/login");
         });
       })
       .catch((info) => {

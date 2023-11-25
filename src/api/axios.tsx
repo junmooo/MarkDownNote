@@ -30,7 +30,8 @@ function request(axiosConfig: Config) {
       if (
         !token &&
         config.url !== "/user/login" &&
-        config.url !== "/user/register"
+        config.url !== "/user/register" &&
+        config.url !== "/user/getName"
       ) {
         window.location.href = "/login";
       }
