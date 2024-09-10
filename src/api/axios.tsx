@@ -18,7 +18,7 @@ type Config = {
 function request(axiosConfig: Config) {
   const service = axios.create({
     // baseURL: "http://127.0.0.1:8088/",
-    baseURL: "https://qingbing.top/api/",
+    baseURL: "http://qingbing.top:9943/",
     timeout: 60000,
   });
 

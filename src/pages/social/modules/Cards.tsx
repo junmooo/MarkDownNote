@@ -12,7 +12,7 @@ const Cards = (props: Iprops) => {
   return (
     <div className="cards">
       {data?.map((e) => {
-        const st = e.article.indexOf("https://qingbing.top/");
+        const st = e.article.indexOf("http://qingbing.top:9943/");
         let imgUrl = "";
         if (st !== -1) {
           const ed = e.article.indexOf(")", st);
